@@ -23,14 +23,14 @@ function GameObject(position, rotation, scale, sprite)
     
     Object.defineProperty(this, "position", {
         get: function() { return _position; },
-        set: function(value) { if(value.hasOwnProperty("x") && value.hasOwnProperty("y")) 
-                                    _position.x = value.x, _position.y = value.y; }
+        set: function(value) { if(value instanceof Vector && value.hasOwnProperty("x") && value.hasOwnProperty("y")) 
+                                    _position = value; }
     });
     
     Object.defineProperty(this, "scale", {
         get: function() { return _scale; },
-        set: function(value) { if(value.hasOwnProperty("x") && value.hasOwnProperty("y")) 
-                                    _scale.x = value.x, _scale.y = value.y; }
+        set: function(value) { if(value instanceof Vector && value.hasOwnProperty("x") && value.hasOwnProperty("y")) 
+                                    _scale = value; }
     });
     
     Object.defineProperty(this, "rotation", {
@@ -40,9 +40,8 @@ function GameObject(position, rotation, scale, sprite)
     
     Object.defineProperty(this, "velocity", {
         get: function() { return _velocity; },
-        set: function(value) { if(value.hasOwnProperty("x") && value.hasOwnProperty("y")) 
-                                    _velocity.x = value.x, _velocity.y = value.y; 
-                                if(Number.isInteger(value)) _velocity.x = value, _velocity.y = value;}
+        set: function(value) { if(value instanceof Vector && value.hasOwnProperty("x") && value.hasOwnProperty("y")) _velocity = value;
+                                if(Number.isInteger(value)) _velocity.x = value, _velocity.y = value; }
     });
     
     Object.defineProperty(this, "active", {
@@ -60,14 +59,19 @@ function GameObject(position, rotation, scale, sprite)
         set: function(value) { if($.isNumeric(value)) _collisionType = value; }
     });
     
-    GameObject.prototype.Update = function(dt)
+    Object.defineProperty(this, "sprite", {
+        get: function() { return _sprite; }
+    });
+    
+    GameObject.prototype.Update = function(input, dt)
     {
         this.position.add(this.velocity.multiplyByNumber(dt));
+        this.sprite.Update(dt);
     };
     
     GameObject.prototype.Draw = function(context)
     {
-        context.drawImage(_sprite, _position.x, _position.y);
+        this.sprite.Draw(context, this.position, this.rotation, this.scale);
     };
     
     GameObject.prototype.HandleCollision = function(cO)
