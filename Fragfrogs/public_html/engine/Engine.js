@@ -104,7 +104,7 @@ function Engine(resolution, title, canvasParent)
             var dt = now - engine.lastFrame;
             if(dt > maxFrameTime) { dt = maxFrameTime; }
             
-            Engine.currentGame[engine.gameTitle].currentScene.Update.apply(engine, [engine.input, dt/1000]);
+            Engine.currentGame[engine.gameTitle].currentScene.Update(engine.input, dt/1000);
             Draw(engine.canvas.getContext('2d'));
             if(engine.input !== null) engine.input.Update(dt/1000);
             engine.lastFrame = now;
@@ -119,7 +119,7 @@ function Engine(resolution, title, canvasParent)
         context.save();
         context.scale(1,1);
         
-        Engine.currentGame[engine.gameTitle].currentScene.Draw.apply(Engine, [engine.canvas.getContext('2d')]);
+        Engine.currentGame[engine.gameTitle].currentScene.Draw(engine.canvas.getContext('2d'));
         
         context.restore();
     }
@@ -280,7 +280,7 @@ function Engine(resolution, title, canvasParent)
         
         return image;
     }
-    engine.PreloadScripts(["engine/ExtendedMath.js", "engine/GameObject.js", "engine/Scene.js"]);
+    engine.PreloadScripts(["engine/ExtendedMath.js", "engine/Sprite.js", "engine/Animation.js", "engine/GameObject.js", "engine/Scene.js", "engine/ReadTextFile.js"]);
     
     return engine;
 };
