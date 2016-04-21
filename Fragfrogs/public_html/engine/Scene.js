@@ -6,17 +6,22 @@
 
 function Scene()
 {
-    var _gameObjects = { "background": [],
+    var _private = {};
+    _private._gameObjects = { "background": [],
                          "game": [],
                          "foreground": []};
     
+    Object.defineProperty(this, "private", {
+        get: function() { return _private; }
+    });
+    
     this.AddGameObject = function(gameobject, layer)
     {
-        if(_gameObjects.hasOwnProperty(layer))
+        if(this.private._gameObjects.hasOwnProperty(layer))
         {
             if(gameobject instanceof GameObject)
             {
-                _gameObjects[layer].push(gameobject);
+                this.private._gameObjects[layer].push(gameobject);
             }else
             {
                 console.log("object must be instance of GameObject");
@@ -32,9 +37,9 @@ function Scene()
     
     Scene.prototype.CheckCollision = function(gameObject)
     {
-        for(var layer in _gameObjects)
+        for(var layer in this.private._gameObjects)
         {
-            _gameObjects[layer].forEach(function(entry)
+            this.private._gameObjects[layer].forEach(function(entry)
             {
                 if(entry.active && entry.hasCollision)
                 {
@@ -46,16 +51,17 @@ function Scene()
     
     Scene.prototype.Update = function(input, dt)
     {
-        for(var layer in _gameObjects)
+        var that = this;
+        for(var layer in this.private._gameObjects)
         {
-            _gameObjects[layer].forEach(function(entry)
+            this.private._gameObjects[layer].forEach(function(entry)
             {
                 if(entry.active)
                 {
-                    entry.Update();
+                    entry.Update(input, dt);
                     if(entry.hasCollision)
                     {
-                        Scene.prototype.CheckCollision.apply(this, [entry]);
+                        Scene.prototype.CheckCollision.call(that, entry);
                     }
                 }
             });
@@ -64,9 +70,9 @@ function Scene()
     
     Scene.prototype.Draw = function(context)
     {
-        for(var layer in _gameObjects)
+        for(var layer in this.private._gameObjects)
         {
-            _gameObjects[layer].forEach(function(entry)
+            this.private._gameObjects[layer].forEach(function(entry)
             {
                 if(entry.active)
                 {
