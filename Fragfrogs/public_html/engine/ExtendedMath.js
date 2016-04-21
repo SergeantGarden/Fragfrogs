@@ -93,3 +93,46 @@ function Vector(x, y)
     };
 }
 
+function LineSegment(startPoint, endPoint)
+{
+    this.startPoint = startPoint;
+    this.endPoint = endPoint;
+    
+    LineSegment.prototype.directionVector = function()
+    {
+        return this.startPoint.connection(this.endPoint);
+    };
+    
+    LineSegment.prototype.placeVector = function()
+    {
+        return this.startPoint;
+    };
+    
+    LineSegment.prototype.normalVector = function()
+    {
+        return this.directionVector().perpendicular().getNormalized();
+    };
+    
+    LineSegment.prototype.equationConstant = function()
+    {
+        return this.placeVector().dotProduct(this.normalVector());
+    };
+    
+    LineSegment.prototype.intersectionParameter = function(l2)
+    {
+        return (l2.equationConstant() - (this.placeVector().dotProduct(l2.normalVector()))) / 
+                this.directionVector().dotProduct(l2.normalVector());
+    };
+    
+    LineSegment.prototype.intersection = function(l2)
+    {
+        if(this.intersectionParameter(l2) >= 0 && this.intersectionParameter(l2) <= 1)
+        {
+            if(l2.intersectionParameter(this) >= 0 && l2.intersectionParameter(this) <= 1)
+            {
+                return true;
+            }
+        }
+        return false;
+    };
+}
