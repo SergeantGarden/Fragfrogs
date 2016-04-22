@@ -30,6 +30,11 @@ function Engine(resolution, title, canvasParent)
     engine.canvas = document.createElement('canvas');
     engine.canvas.oncontextmenu = function() { return false; };
     
+    engine.canvas.id = engine.gameTitle;
+    engine.canvas.width = Engine.currentGame[engine.gameTitle].resolution.x;
+    engine.canvas.height = Engine.currentGame[engine.gameTitle].resolution.y;
+    engine.canvas.style.border = "1px solid";
+    
     var canvasLocation = canvasParent || 'body';
     var oldScene = null;
     var maxFrameTime = 100;
@@ -90,10 +95,6 @@ function Engine(resolution, title, canvasParent)
     
     gameLoop = function()
     {
-        engine.canvas.id = engine.gameTitle;
-        engine.canvas.width = Engine.currentGame[engine.gameTitle].resolution.x;
-        engine.canvas.height = Engine.currentGame[engine.gameTitle].resolution.y;
-        engine.canvas.style.border = "1px solid";
         if(canvasLocation !== 'body' && document.getElementById(canvasLocation))
         {
             document.getElementById(canvasLocation).appendChild(engine.canvas);
