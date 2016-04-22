@@ -21,8 +21,8 @@ window.onload = function(e)
     {
         var scene = null;
         var engine = Engine({x: 800, y: 400}, "Fragfrogs");
-        engine.PreloadScripts("game/GameScene.js");
-        engine.PreloadAssets("BG:images/bg.png, Player:images/player.png");
+        engine.PreloadScripts("game/GameScene.js, game/Player.js");
+        engine.PreloadAssets("BG:images/bg.png, Player:images/player.png, Glow:images/tongueGlow.png");
         engine.onLoaded(function() {
             scene = new GameScene();
             engine.Start(scene);

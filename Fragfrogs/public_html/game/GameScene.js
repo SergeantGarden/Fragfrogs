@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-GameScene = function()
+GameScene = function(engine)
 {
     Scene.call(this);
     
+    //var canvasSize = new Vector(engine.canvas.width, engine.canvas.height);
+    //var tileSize = new Vector(16,16);
+    //var tiles = new Vector(parseInt(canvasSize.x / tileSize.x), parseInt(canvasSize.y / tileSize.y));
+    
     this.AddGameObject(new GameObject(new Vector(200,144), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["BG"])), "background");
-    var animation = new Animation(Engine.currentGame["Fragfrogs"].gameAssets["Player"], new Vector(16,16));
-    animation.AddAnimation("walk", [1,5,1,5]);
-    this.AddGameObject(new GameObject(new Vector(10,10), 0, new Vector(1,1), animation), "game");
+    this.AddGameObject(new Player(1, new Vector(10,10), 0, new Vector(1,1), "Player", new Vector(16, 16)), "game");
     
     GameScene.prototype.Update = function(input, dt)
     {
