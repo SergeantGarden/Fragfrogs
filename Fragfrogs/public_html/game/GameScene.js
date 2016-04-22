@@ -18,9 +18,10 @@ GameScene = function(engine)
 {
     Scene.call(this);
     
-    //var canvasSize = new Vector(engine.canvas.width, engine.canvas.height);
-    //var tileSize = new Vector(16,16);
-    //var tiles = new Vector(parseInt(canvasSize.x / tileSize.x), parseInt(canvasSize.y / tileSize.y));
+    var canvasSize = new Vector(engine.canvas.width, engine.canvas.height);
+    var tileSize = new Vector(16,16);
+    var tiles = new Vector(parseInt(canvasSize.x / tileSize.x), parseInt((canvasSize.y - (2 * tileSize.y)) / tileSize.y));
+    var totalTiles = tiles.x * tiles.y;
     
     this.AddGameObject(new GameObject(new Vector(200,144), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["BG"])), "background");
     this.AddGameObject(new Player(1, new Vector(10,10), 0, new Vector(1,1), "Player", new Vector(16, 16)), "game");
@@ -34,6 +35,29 @@ GameScene = function(engine)
     {
         Scene.prototype.Draw.call(this, context);
     };
+    
+    function LoadLevel(level)
+    {
+        var levelData = ReadFile("levels/Scene_" + level + ".txt");
+        for(var i = 0; i < totalTiles; i++)
+        {
+            var height = (Math.floor((i / tiles.x)) * tileSize.y) + (tileSize.y / 2);
+            var width = ((i % tiles.x) * tileSize.x) + (tileSize.x / 2);
+            
+            switch(levelData[i])
+            {
+                case "1":
+                    var wallBlock = new GameObject(new Vector(width, height), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Wall"]));
+                    this.AddGameObject(wallBlock, "game");
+                    break;
+                case "2":
+                    //var crop = new Crop();
+                    break;
+            }
+        }
+    };
+    
+    LoadLevel.call(this, 1);
 };
 
 GameScene.prototype = new Scene();

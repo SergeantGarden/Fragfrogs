@@ -20,11 +20,11 @@ window.onload = function(e)
     $.getScript("engine/Engine.js", function() 
     {
         var scene = null;
-        var engine = Engine({x: 800, y: 400}, "Fragfrogs");
+        var engine = Engine({x: 400, y: 320}, "Fragfrogs");
         engine.PreloadScripts("game/GameScene.js, game/Player.js");
-        engine.PreloadAssets("BG:images/bg.png, Player:images/player.png, Glow:images/tongueGlow.png");
+        engine.PreloadAssets("BG:images/bg.png, Player:images/player.png, Glow:images/tongueGlow.png, Wall:images/WallBlock.png");
         engine.onLoaded(function() {
-            scene = new GameScene();
+            scene = new GameScene(engine);
             engine.Start(scene);
         });
     });
