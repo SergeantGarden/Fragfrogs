@@ -21,12 +21,12 @@ function Vector(x, y)
     
     Object.defineProperty(this, "x", {
         get: function() { return _x; },
-        set: function(value) { if(Number.isInteger(value)) _x = value; }
+        set: function(value) { if($.isNumeric(value)) _x = value; parseInt(_x); }
     });
     
     Object.defineProperty(this, "y", {
         get: function() { return _y; },
-        set: function(value) { if(Number.isInteger(value)) _y = value; }
+        set: function(value) { if($.isNumeric(value)) _y = value; parseInt(_y); }
     });
     
     Vector.prototype.add = function(vector)
