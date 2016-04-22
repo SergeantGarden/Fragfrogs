@@ -71,7 +71,7 @@ function Scene()
                     entry.Update(input, dt);
                     if(entry.hasCollision)
                     {
-                        Scene.prototype.CheckCollision.call(that, entry);
+                        that.CheckCollision.call(that, entry);
                     }
                 }
             });
