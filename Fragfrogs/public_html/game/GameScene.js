@@ -24,7 +24,8 @@ GameScene = function(engine)
     var totalTiles = tiles.x * tiles.y;
     
     this.AddGameObject(new GameObject(new Vector(200,144), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["BG"])), "background");
-    this.AddGameObject(new Player(1, new Vector(10,10), 0, new Vector(1,1), "Player", new Vector(16, 16)), "game");
+    this.AddGameObject(new Player(1, new Vector(24,24), 0, new Vector(1,1), "Player", new Vector(16, 16)), "game");
+    this.AddGameObject(new Player(2, new Vector(152,152), 0, new Vector(1,1), "Player", new Vector(16, 16)), "game");
     
     GameScene.prototype.Update = function(input, dt)
     {
@@ -51,7 +52,8 @@ GameScene = function(engine)
                     this.AddGameObject(wallBlock, "game");
                     break;
                 case "2":
-                    //var crop = new Crop();
+                    var crop = new Crop(new Vector(width, height), 0, new Vector(1,1), tileSize);
+                    this.AddGameObject(crop, "game");
                     break;
             }
         }
