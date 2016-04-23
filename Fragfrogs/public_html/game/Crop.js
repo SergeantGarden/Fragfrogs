@@ -47,14 +47,14 @@ function Crop(position, rotation, scale, size)
             this.hasCollision = false;
             _state = CROP_STATE.REGENERATING;
             this.sprite.Stop();
-            this.sprite.Play("regen", _regenTime);
+            this.sprite.Play("regen", false, _regenTime);
         }else if(_state === CROP_STATE.REGENERATING)
         {
-            if(this.sprite.getCurrentFrameIndex() >= 1)
+            if(this.sprite.currentFrame >= 1)
             {
                 this.hasCollision = true;
             }
-            if(!this.sprite.isPlaying())
+            if(!this.sprite.isPlaying)
             {
                 _state = CROP_STATE.FULLGROWN;
             }
