@@ -171,18 +171,15 @@ function Player(player, position, rotation, scale, imageName, size)
             {
                 this.direction.up = true;
                 this.direction.down = this.direction.left = this.direction.right = false;
-            }
-            if(input.keyboard.keyDown(KEY_CODE.DOWN))
+            }else if(input.keyboard.keyDown(KEY_CODE.DOWN))
             {
                 this.direction.down = true;
                 this.direction.up = this.direction.left = this.direction.right = false;
-            }
-            if(input.keyboard.keyDown(KEY_CODE.LEFT))
+            }else if(input.keyboard.keyDown(KEY_CODE.LEFT))
             {
                 this.direction.left = true;
                 this.direction.up = this.direction.down = this.direction.right = false;
-            }
-            if(input.keyboard.keyDown(KEY_CODE.RIGHT))
+            }else if(input.keyboard.keyDown(KEY_CODE.RIGHT))
             {
                 this.direction.right = true;
                 this.direction.up = this.direction.down = this.direction.left = false;
