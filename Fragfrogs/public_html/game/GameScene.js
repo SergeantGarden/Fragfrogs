@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-GameScene = function(engine)
+GameScene = function(engine, playerOne, playerTwo)
 {
     Scene.call(this);
     
@@ -24,8 +24,9 @@ GameScene = function(engine)
     var totalTiles = tiles.x * tiles.y;
     
     this.AddGameObject(new GameObject(new Vector(200,144), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["BG"])), "background");
-    this.AddGameObject(new Player(1, new Vector(24,24), 0, new Vector(1,1), "Player", new Vector(16, 16)), "game");
-    this.AddGameObject(new Player(2, new Vector(152,152), 0, new Vector(1,1), "Player", new Vector(16, 16)), "game");
+    this.AddGameObject(new Player(1, new Vector(24,24), 0, new Vector(1,1), playerOne, new Vector(16, 16)), "game");
+    this.AddGameObject(new Player(2, new Vector(152,152), 0, new Vector(1,1), playerTwo, new Vector(16, 16)), "game");
+    this.AddGameObject(new ScoreBar(playerOne, playerTwo, new Vector(0, tiles.y * tileSize.y), 0, new Vector(1,1), new Vector(canvasSize.x, 32), tileSize), "game");
     
     GameScene.prototype.Update = function(input, dt)
     {

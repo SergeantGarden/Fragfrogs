@@ -21,10 +21,10 @@ window.onload = function(e)
     {
         var scene = null;
         var engine = Engine({x: 400, y: 320}, "Fragfrogs");
-        engine.PreloadScripts("game/GameScene.js, game/Player.js, game/Crop.js");
-        engine.PreloadAssets("BG:images/bg.png, Player:images/player.png, Glow:images/tongueGlow.png, Wall:images/WallBlock.png, Crop:images/crop.png");
+        engine.PreloadScripts("game/GameScene.js, game/Player.js, game/Crop.js, game/ScoreBar.js");
+        engine.PreloadAssets("BG:images/bg.png, PlayerGreen:images/player.png, PlayerRed:images/playerred.png, PlayerBlue:images/playerblue.png, Glow:images/tongueGlow.png, Wall:images/WallBlock.png, Crop:images/crop.png");
         engine.onLoaded(function() {
-            scene = new GameScene(engine);
+            scene = new GameScene(engine, "PlayerGreen", "PlayerRed");
             engine.Start(scene);
         });
     });
