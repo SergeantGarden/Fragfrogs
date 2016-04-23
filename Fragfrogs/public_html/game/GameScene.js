@@ -18,7 +18,7 @@ GameScene = function(engine, playerOne, playerTwo)
 {
     Scene.call(this);
     
-    var canvasSize = new Vector(engine.canvas.width, engine.canvas.height);
+    var canvasSize = new Vector(400, 320);
     var tileSize = new Vector(16,16);
     var tiles = new Vector(parseInt(canvasSize.x / tileSize.x), parseInt((canvasSize.y - (2 * tileSize.y)) / tileSize.y));
     var totalTiles = tiles.x * tiles.y;

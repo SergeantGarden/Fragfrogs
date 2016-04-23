@@ -26,6 +26,7 @@ function Engine(resolution, title, canvasParent)
     var engine = {};
     engine.loading = true;
     engine.gameTitle = title;
+    engine.scale = { x: 1, y: 1 };
     
     engine.canvas = document.createElement('canvas');
     engine.canvas.oncontextmenu = function() { return false; };
@@ -128,7 +129,7 @@ function Engine(resolution, title, canvasParent)
         context.clearRect(0,0, Engine.currentGame[engine.gameTitle].resolution.x, Engine.currentGame[engine.gameTitle].resolution.y);
         context.fillStyle = "#000";
         context.save();
-        context.scale(1,1);
+        context.scale(engine.scale.x, engine.scale.y);
         
         Engine.currentGame[engine.gameTitle].currentScene.Draw(engine.canvas.getContext('2d'));
         
