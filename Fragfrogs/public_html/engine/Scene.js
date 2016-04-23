@@ -66,7 +66,10 @@ function Scene()
         {
             this.private._gameObjects[layer].forEach(function(entry)
             {
-                if(entry.active)
+                if(entry === null || entry === undefined)
+                {
+                    that.private._gameObjects[layer].splice(that.private._gameObjects[layer].indexOf(entry, 1));
+                }else if(entry.active)
                 {
                     entry.Update(input, dt);
                     if(entry.hasCollision)
