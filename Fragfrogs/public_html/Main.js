@@ -21,8 +21,8 @@ window.onload = function(e)
     {
         var scene = null;
         var engine = Engine({x: 400, y: 320 }, "Fragfrogs");
-        engine.PreloadScripts("game/GameScene.js, game/Player.js, game/Crop.js, game/Coin.js, game/ScoreBar.js");
-        engine.PreloadAssets("BG:images/bg.png, PlayerGreen:images/player.png, PlayerRed:images/playerred.png, PlayerBlue:images/playerblue.png, Glow:images/tongueGlow.png, Wall:images/WallBlock.png, Crop:images/crop.png, Coin:images/coin.png");
+        engine.PreloadScripts("game/GameScene.js, game/Player.js, game/Crop.js, game/Coin.js, game/Fly.js, game/ScoreBar.js");
+        engine.PreloadAssets("BG:images/bg.png, PlayerGreen:images/player.png, PlayerRed:images/playerred.png, PlayerBlue:images/playerblue.png, Glow:images/tongueGlow.png, Wall:images/WallBlock.png, Crop:images/crop.png, Coin:images/coin.png, Fly:images/fly.png");
         engine.onLoaded(function() {
             engine.Resize({x: 600, y: 480});
             scene = new GameScene(engine, "PlayerGreen", "PlayerRed");
