@@ -27,6 +27,8 @@ function Engine(resolution, title, canvasParent)
     engine.loading = true;
     engine.gameTitle = title;
     engine.scale = { x: 1, y: 1 };
+    engine.resizeScale = {x: engine.scale.x, y: engine.scale.y};
+    engine.originalScale = {x: engine.scale.x, y: engine.scale.y};
     
     engine.canvas = document.createElement('canvas');
     engine.canvas.oncontextmenu = function() { return false; };
@@ -126,10 +128,10 @@ function Engine(resolution, title, canvasParent)
     
     function Draw(context)
     {
-        context.clearRect(0,0, Engine.currentGame[engine.gameTitle].resolution.x, Engine.currentGame[engine.gameTitle].resolution.y);
+        context.clearRect(0,0, Engine.currentGame[engine.gameTitle].resolution.x * engine.resizeScale.x, Engine.currentGame[engine.gameTitle].resolution.y * engine.resizeScale.y);
         context.fillStyle = "#000";
         context.save();
-        context.scale(engine.scale.x, engine.scale.y);
+        context.scale(engine.scale.x * engine.resizeScale.x, engine.scale.y * engine.resizeScale.y);
         
         Engine.currentGame[engine.gameTitle].currentScene.Draw(engine.canvas.getContext('2d'));
         
@@ -222,6 +224,33 @@ function Engine(resolution, title, canvasParent)
         }
         
         return assetArray;
+    };
+    
+    engine.Resize = function(newResolution)
+    {
+        var scale = { x: newResolution.x / Engine.currentGame[engine.gameTitle].resolution.x,
+                      y: newResolution.y / Engine.currentGame[engine.gameTitle].resolution.y };
+        engine.resizeScale = scale;
+        engine.canvas.width = newResolution.x;
+        engine.canvas.height = newResolution.y;
+    };
+    
+    engine.ZoomIn = function(scale)
+    {
+        engine.originalScale = {x: engine.scale.x, y: engine.scale.y};;
+        if(scale.hasOwnProperty("x") && scale.hasOwnProperty("y"))
+        {
+            engine.scale = {x: scale.x, y: scale.y};;
+        }else if($.isNumeric(scale))
+        {
+            engine.scale.x = scale;
+            engine.scale.y = scale;
+        }
+    };
+    
+    engine.ZoomOut = function()
+    {
+        engine.scale = {x: engine.originalScale.x, y: engine.originalScale.y };
     };
     
     engine.switchScene = function(scene, keepScene)
