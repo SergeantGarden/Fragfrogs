@@ -321,7 +321,7 @@ function Engine(resolution, title, canvasParent)
         
         return image;
     }
-    engine.PreloadScripts(["engine/ExtendedMath.js", "engine/Sprite.js", "engine/Animation.js", "engine/GameObject.js", "engine/Scene.js", "engine/ReadTextFile.js"]);
+    engine.PreloadScripts(["engine/ExtendedMath.js", "engine/Sprite.js", "engine/Animation.js", "engine/GameObject.js", "engine/Scene.js", "engine/Particle.js", "engine/Emitter.js", "engine/ReadTextFile.js"]);
     
     return engine;
 };
