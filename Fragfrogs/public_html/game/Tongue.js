@@ -32,6 +32,8 @@ function Tongue(player, position, rotation, scale, size)
     var _shooting = false;
     var _retreating = false;
     
+    this.active = false;
+    
     this.Fire = function(facing, position, playerSize)
     {
         switch(facing)
@@ -58,6 +60,7 @@ function Tongue(player, position, rotation, scale, size)
                 break;
         }
         _shooting = true;
+        this.active = true;
     };
     
     this.Update = function(input, dt)
