@@ -40,10 +40,10 @@ function Sprite(sprite, size, alpha)
     Sprite.prototype.Draw = function(ctx, position, rotation, scale)
     {
         ctx.save();
-        ctx.translate(position.x - (this.size.x * scale.x) / 2, position.y - (this.size.y * scale.y) / 2);
+        ctx.translate(position.x, position.y);
         ctx.rotate(rotation * (Math.PI/180));
         ctx.globalAlpha = this.alpha;
-        ctx.drawImage(this.private._sprite, 0, 0, (this.size.x * scale.x), (this.size.y * scale.y));
+        ctx.drawImage(this.private._sprite, -(this.size.x * scale.x) / 2, -(this.size.y * scale.y) / 2, (this.size.x * scale.x), (this.size.y * scale.y));
         ctx.restore();
     };
 };
