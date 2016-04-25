@@ -22,11 +22,12 @@ var PLAYER_FACING =
     RIGHT: 3
 };
 
-function Player(player, position, rotation, scale, imageName, size)
+function Player(player, scene, position, rotation, scale, imageName, size)
 {
     GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets[imageName], size, 1));
     
     var _player = player || 0;
+    var _tongue = new Tongue(_player, this.position, this.rotation, this.scale, new Vector(6,6));
     var _facing = PLAYER_FACING.DOWN;
     var _speed = 75;
     var _specialAbility = true;
@@ -79,6 +80,8 @@ function Player(player, position, rotation, scale, imageName, size)
     this.sprite.AddAnimation("left", [2,6,2,6]);
     this.sprite.AddAnimation("right", [3,7,3,7]);
     
+    scene.AddGameObject(_tongue, "foreground");
+    
     this.Update = function(input, dt)
     {
         if(this.player === 1)
@@ -121,6 +124,7 @@ function Player(player, position, rotation, scale, imageName, size)
     
     function Shoot()
     {
+        _tongue.Fire(_facing, position , size);
         _specialAbility = false;
         _shooting = true;
     };
