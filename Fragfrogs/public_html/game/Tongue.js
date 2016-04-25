@@ -26,8 +26,13 @@ function Tongue(player, position, rotation, scale, size)
 {
     GameObject.call(this, position, rotation, scale, new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["TongueEnd"], size, 1));
     var _tongueBody = new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["TongueBody"], size, 1);
+    var _tongueBodyPosition = new Vector(position.x, position.y);
+    var _tongueBodyScale = new Vector(1,1);
+    
     
     var _playerTongue = player;
+    var _playerPosition = new Vector(position.x, position.y);
+    var _playerSize = new Vector(0,0);
     var _speed = 300;
     var _shooting = false;
     var _retreating = false;
@@ -36,6 +41,9 @@ function Tongue(player, position, rotation, scale, size)
     
     this.Fire = function(facing, position, playerSize)
     {
+        _playerPosition = new Vector(position.x, position.y);
+        _playerSize = new Vector(playerSize.x, playerSize.y);
+        
         switch(facing)
         {
             case TONGUE_FACING.UP:
@@ -67,7 +75,33 @@ function Tongue(player, position, rotation, scale, size)
     {
         if(_shooting)
         {
-            
+            if(this.velocity.x !== 0)
+            {
+                if(this.velocity.x > 0)
+                {
+                    _tongueBodyScale.y = ((this.position.x - size.x) - _playerPosition.x) / size.y;
+                    _tongueBodyPosition.x = _playerPosition.x + ((_playerSize.x / 2) + (size.y * _tongueBodyScale.y) / 2);
+                }
+                if(this.velocity.x < 0)
+                {
+                    _tongueBodyScale.y = ((this.position.x + size.x) - _playerPosition.x) / size.y;
+                    _tongueBodyPosition.x = _playerPosition.x - ((_playerSize.x / 2) - (size.y * _tongueBodyScale.y) / 2);
+                }
+                _tongueBodyPosition.y = this.position.y;
+            }else if(this.velocity.y !== 0)
+            {
+                if(this.velocity.y > 0)
+                {
+                    _tongueBodyScale.y = ((this.position.y - size.y) - _playerPosition.y) / size.y;
+                    _tongueBodyPosition.y = _playerPosition.y + ((_playerSize.y / 2) + (size.y * _tongueBodyScale.y) / 2);
+                }
+                if(this.velocity.y < 0)
+                {
+                    _tongueBodyScale.y = ((this.position.y + size.y) - _playerPosition.y) / size.y;
+                    _tongueBodyPosition.y = _playerPosition.y - ((_playerSize.y / 2) - (size.y * _tongueBodyScale.y) / 2);
+                }
+                _tongueBodyPosition.x = this.position.x;
+            }
         }
         _tongueBody.Update(dt);
         GameObject.prototype.Update.call(this, input, dt);
@@ -75,7 +109,7 @@ function Tongue(player, position, rotation, scale, size)
     
     this.Draw = function(context)
     {
-        _tongueBody.Draw(context, this.position, this.rotation, this.scale);
+        _tongueBody.Draw(context, _tongueBodyPosition, this.rotation, _tongueBodyScale);
         GameObject.prototype.Draw.call(this, context);
     };
     
