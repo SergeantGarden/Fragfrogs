@@ -14,22 +14,24 @@
  *  limitations under the License.
  */
 
-var COLLISION_TYPE = {
-    SQUARE: 0,
-    CIRCLE: 1
-};
-
-function GameObject(position, rotation, scale, sprite)
+function GameObject(position, rotation, scale, sprite, moveable)
 {
+    console.log(moveable);
     var _position = position || new Vector(0,0);
-    var _scale = scale || new Vector(1,1);
-    var _velocity = new Vector(0,0);
     var _rotation = rotation || 0;
-    var _hasCollision = true;
-    var _collisionType = COLLISION_TYPE.SQUARE;
+    var _scale = scale || new Vector(1,1);
+    if(typeof(moveable) !== "boolean") moveable = true;
+    var _moveable = moveable;
+    console.log(_moveable);
+    var _velocity = new Vector(0,0);
     var _active = true;
      
     var _sprite = sprite || null;
+    
+    var _hasCollision = true;
+    var _collisionProperties = {};
+    _collisionProperties.size = {x: _sprite.size.x, y: _sprite.size.y };
+    var _collision = new Collision(COLLISION_TYPE.RECTANGLE, this, _collisionProperties);
     
     Object.defineProperty(this, "position", {
         get: function() { return _position; },
@@ -48,10 +50,15 @@ function GameObject(position, rotation, scale, sprite)
         set: function(value) { if(Number.isInteger(value)) _rotation = value;}
     });
     
+    Object.defineProperty(this, "moveable", {
+        get: function() { return _moveable; },
+        set: function(value) { if(typeof(value) === "boolean") _moveable = value; }
+    });
+    
     Object.defineProperty(this, "velocity", {
         get: function() { return _velocity; },
-        set: function(value) { if(value instanceof Vector && value.hasOwnProperty("x") && value.hasOwnProperty("y")) _velocity = value;
-                                if(Number.isInteger(value)) _velocity.x = value, _velocity.y = value; }
+        set: function(value) { if(value instanceof Vector && value.hasOwnProperty("x") && value.hasOwnProperty("y") && _moveable) _velocity = value;
+                                if(Number.isInteger(value) && _moveable) _velocity.x = value, _velocity.y = value; }
     });
     
     Object.defineProperty(this, "active", {
@@ -64,9 +71,9 @@ function GameObject(position, rotation, scale, sprite)
         set: function(value) { if(typeof(value) === "boolean") _hasCollision = value; }
     });
     
-    Object.defineProperty(this, "collisionType", {
-        get: function() { return _collisionType; },
-        set: function(value) { if($.isNumeric(value)) _collisionType = value; }
+    Object.defineProperty(this, "collision", {
+        get: function() { return _collision; },
+        set: function(value) { _collision = value; }
     });
     
     Object.defineProperty(this, "sprite", {

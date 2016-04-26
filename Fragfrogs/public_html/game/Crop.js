@@ -23,7 +23,7 @@ var CROP_STATE =
 
 function Crop(position, rotation, scale, size)
 {
-    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets["Crop"], size, 1));
+    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets["Crop"], size, 1), false);
     
     this.sprite.AddAnimation("regen", [0,1,2,3]);
     this.sprite.frameIndex = 3;

@@ -16,7 +16,7 @@
 
 function Fly(position, rotation, scale, size)
 {
-    GameObject.call(this, position, rotation, scale, new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Fly"], size, 1));
+    GameObject.call(this, position, rotation, scale, new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Fly"], size, 1), false);
     
     this.HandleCollision = function(other)
     {

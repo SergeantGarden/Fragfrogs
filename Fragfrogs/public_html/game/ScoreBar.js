@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-function ScoreBar(playerOne, playerTwo, position, rotation, scale, size, playerSize)
+function ScoreBar(playerOne, playerTwo, position, rotation, scale, size, playerSize, moveable)
 {
-    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets[playerOne], playerSize, 1));
+    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets[playerOne], playerSize, 1), moveable);
     this.sprite.frameIndex = 1;
     var _playerSpriteTwo = new Animation(Engine.currentGame["Fragfrogs"].gameAssets[playerTwo], playerSize, 1);
     _playerSpriteTwo.frameIndex = 1;

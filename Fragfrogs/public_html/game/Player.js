@@ -24,7 +24,7 @@ var PLAYER_FACING =
 
 function Player(player, scene, position, rotation, scale, imageName, size)
 {
-    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets[imageName], size, 1));
+    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets[imageName], size, 1), true);
     
     var _player = player || 0;
     var _tongue = new Tongue(_player, this.position, this.rotation, this.scale, new Vector(6,6));
@@ -80,7 +80,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     this.sprite.AddAnimation("left", [2,6,2,6]);
     this.sprite.AddAnimation("right", [3,7,3,7]);
     
-    scene.AddGameObject(_tongue, "foreground");
+    scene.AddGameObject(_tongue, "game");
     
     this.Update = function(input, dt)
     {

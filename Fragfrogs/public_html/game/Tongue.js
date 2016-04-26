@@ -24,7 +24,7 @@ var TONGUE_FACING =
 
 function Tongue(player, position, rotation, scale, size)
 {
-    GameObject.call(this, position, rotation, scale, new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["TongueEnd"], size, 1));
+    GameObject.call(this, position, rotation, scale, new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["TongueEnd"], size, 1), true);
     var _tongueBody = new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["TongueBody"], size, 1);
     var _tongueBodyPosition = new Vector(position.x, position.y);
     var _tongueBodyScale = new Vector(1,1);
