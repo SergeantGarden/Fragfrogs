@@ -72,4 +72,4 @@ function Crop(position, rotation, scale, size)
     };
 };
 
-Crop.prototype = new GameObject();
+Crop.prototype = Object.create(GameObject.prototype);

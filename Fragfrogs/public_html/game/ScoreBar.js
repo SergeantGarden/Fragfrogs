@@ -53,4 +53,4 @@ function ScoreBar(playerOne, playerTwo, position, rotation, scale, size, playerS
         if(scoreTwo !== null && scoreTwo !== undefined) _playerTwoScore = scoreTwo;
     };
 };
-ScoreBar.prototype = new GameObject();
+ScoreBar.prototype = Object.create(GameObject.prototype);

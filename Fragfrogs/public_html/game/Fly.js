@@ -24,4 +24,4 @@ function Fly(position, rotation, scale, size)
     };
 };
 
-Fly.prototype = new GameObject();
+Fly.prototype = Object.create(GameObject.prototype);

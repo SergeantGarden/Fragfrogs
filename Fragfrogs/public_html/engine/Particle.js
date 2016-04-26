@@ -44,4 +44,4 @@ function Particle(sprite, position, lifeDuration, velocity)
     };
 };
 
-Particle.prototype = new GameObject();
+Particle.prototype = Object.create(GameObject.prototype);

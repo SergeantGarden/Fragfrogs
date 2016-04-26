@@ -260,4 +260,4 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     };
 };
 
-Player.prototype = new GameObject();
+Player.prototype = Object.create(GameObject.prototype);

@@ -28,4 +28,4 @@ function Coin(position, rotation, scale, size)
     };
 };
 
-Coin.prototype = new GameObject();
+Coin.prototype = Object.create(GameObject.prototype);

@@ -119,4 +119,4 @@ function Tongue(player, position, rotation, scale, size)
     };
 };
 
-Tongue.prototype = new GameObject();
+Tongue.prototype = Object.create(GameObject.prototype);
