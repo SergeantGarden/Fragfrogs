@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-GameScene = function(engine, playerOne, playerTwo)
+GameScene = function(engine, playerOneSprite, playerTwoSprite)
 {
     Scene.call(this);
     
@@ -23,11 +23,16 @@ GameScene = function(engine, playerOne, playerTwo)
     var tiles = new Vector(parseInt(canvasSize.x / tileSize.x), parseInt((canvasSize.y - (2 * tileSize.y)) / tileSize.y));
     var totalTiles = tiles.x * tiles.y;
     
+    var playerOne = new Player(1, this, new Vector(24,24), 0, new Vector(1,1), playerOneSprite, new Vector(16, 16));
+    var playerTwo = new Player(2, this, new Vector(152,152), 0, new Vector(1,1), playerTwoSprite, new Vector(16, 16));
+    
     this.AddGameObject(new GameObject(new Vector(200,144), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["BG"]), false), "background");
-    this.AddGameObject(new ScoreBar(playerOne, playerTwo, new Vector(0, tiles.y * tileSize.y), 0, new Vector(1,1), new Vector(canvasSize.x, 32), tileSize, false), "foreground");
+    var scoreBar = new ScoreBar(playerOneSprite, playerTwoSprite, new Vector(0, tiles.y * tileSize.y), 0, new Vector(1,1), new Vector(canvasSize.x, 32), tileSize, false);
+    this.AddGameObject(scoreBar, "foreground");
     
     GameScene.prototype.Update = function(input, dt)
     {
+        scoreBar.UpdateText(playerOne.score, playerTwo.score);
         Scene.prototype.Update.call(this, input, dt);
     };
     
@@ -59,8 +64,8 @@ GameScene = function(engine, playerOne, playerTwo)
     };
     
     LoadLevel.call(this, 1);
-    this.AddGameObject(new Player(1, this, new Vector(24,24), 0, new Vector(1,1), playerOne, new Vector(16, 16)), "game");
-    this.AddGameObject(new Player(2, this, new Vector(152,152), 0, new Vector(1,1), playerTwo, new Vector(16, 16)), "game");
+    this.AddGameObject(playerOne, "game");
+    this.AddGameObject(playerTwo, "game");
 };
 
 GameScene.prototype = Object.create(Scene.prototype);
