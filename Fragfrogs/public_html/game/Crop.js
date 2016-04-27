@@ -82,7 +82,7 @@ function Crop(position, rotation, scale, size, scene)
                 var fly = new Fly(this.position, this.rotation, this.scale, this.sprite.size);
                 Engine.currentGame["Fragfrogs"].currentScene.AddGameObject(fly, "game");
             }
-            _emitter.EmitRandom(new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Leaf"]), 3, 0.75, new Vector(60,60));
+            //_emitter.EmitRandom(new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Leaf"]), 3, 0.75, new Vector(60,60));
         }
         _state = CROP_STATE.PICKED;
     };
