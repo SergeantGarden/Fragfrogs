@@ -20,7 +20,11 @@ function Fly(position, rotation, scale, size)
     
     this.HandleCollision = function(other, side)
     {
-        delete this;
+        if(other instanceof Player)
+        {
+            this.active = false;
+            delete this;
+        }
     };
 };
 
