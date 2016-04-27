@@ -113,9 +113,21 @@ function Tongue(player, position, rotation, scale, size)
         GameObject.prototype.Draw.call(this, context);
     };
     
-    this.HandleCollision = function(other)
+    this.HandleCollision = function(other, side)
     {
-        GameObject.prototype.HandleCollision.call(this, other);
+        if(other instanceof WallBlock && !_retreating)
+        {
+            this.velocity = new Vector(-this.velocity.x, -this.velocity.y);
+            _retreating = true;
+        }
+        if(other instanceof Player)
+        {
+            if(other.tongue === this)
+            {
+                _shooting = _retreating = false;
+                this.active = false;
+            }
+        }
     };
 };
 
