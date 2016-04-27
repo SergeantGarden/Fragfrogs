@@ -27,11 +27,14 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets[imageName], size, 1), true);
     
     var _player = player || 0;
+    var _score = 0;
     var _tongue = new Tongue(_player, this.position, this.rotation, this.scale, new Vector(6,6));
     var _facing = PLAYER_FACING.DOWN;
     var _speed = 75;
     var _specialAbility = true;
     var _shooting = false;
+    var _dashing = false;
+    var _dashTimer = 0.2;
     var _direction = {
         up: false,
         down: false,
@@ -44,6 +47,18 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     Object.defineProperty(this, "player", {
         get: function() { return _player; }
+    });
+    
+    Object.defineProperty(this, "score", {
+        get: function()
+        {
+            var score = _score;
+            return score;
+        }
+    });
+    
+    Object.defineProperty(this, "tongue", {
+        get: function() { return _tongue; }
     });
     
     Object.defineProperty(this, "direction", {
@@ -165,11 +180,11 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     function PlayerTwoUpdate(input, dt)
     {
-        if(input.keyboard.keyDown(KEY_CODE.FSLASH) && this.specialAbility)
+        if(input.keyboard.keyDown(KEY_CODE.FSLASH) && this.specialAbility && !_dashing)
         {
             Shoot();
         }
-        if(!this.shooting)
+        if(!this.shooting && !_dashing)
         {
             if(input.keyboard.keyDown(KEY_CODE.UP))
             {
@@ -257,6 +272,92 @@ function Player(player, scene, position, rotation, scale, imageName, size)
         }
         
         GameObject.prototype.Draw.call(this, context);
+    };
+    
+    Respawn = function()
+    {
+        _specialAbility = false;
+        //this.position.set(GameState.spawnLocations[Math.ceil(Math.random() * GameState.spawnLocations.length - 1)]);
+        //this.sprite.flash(2, 0.3, 0.075);
+    };
+    
+    ResetDashing = function()
+    {
+        _dashing = false;
+    };
+    
+    this.HandleCollision = function(other, side)
+    {
+        if(other instanceof Crop)
+        {
+            setTimeout(ResetDashing.bind(this), (_dashTimer * 1000));
+            var extraSetBack = 0;
+            _dashing = true;
+            
+            if(_facing === PLAYER_FACING.UP || _facing === PLAYER_FACING.DOWN)
+            {
+                extraSetBack = (this.sprite.size.y / 4);
+            }else if(_facing === PLAYER_FACING.LEFT || _facing === PLAYER_FACING.RIGHT)
+            {
+                extraSetBack = (this.sprite.size.x / 4);
+            }
+            
+            switch(_facing)
+            {
+            case PLAYER_FACING.UP:
+                this.position.y += extraSetBack;
+                break;
+            case PLAYER_FACING.DOWN:
+                this.position.y -= extraSetBack;
+                break;
+            case PLAYER_FACING.LEFT:
+                this.position.x += extraSetBack;
+                break;
+            case PLAYER_FACING.RIGHT:
+                this.position.x -= extraSetBack;
+                break;
+            }
+        }
+        
+        if(other instanceof WallBlock || other instanceof Player)
+        {
+            switch(side)
+            {
+            case "top":
+                this.position.y = other.position.y + this.sprite.size.y;
+                break;
+            case "bottom":
+                this.position.y = other.position.y - this.sprite.size.y;
+                break;
+            case "left":
+                this.position.x = other.position.x + this.sprite.size.x;
+                break;
+            case "right":
+                this.position.x = other.position.x - this.sprite.size.x;
+                break;
+            }
+        }
+        
+        if(other instanceof Tongue)
+        {
+            if(other !== this.tongue)
+            {
+                Respawn.call(this);
+            }else
+            {
+                _shooting = false;
+            }
+        }
+        
+        if(other instanceof Fly)
+        {
+            _specialAbility = true;
+        }
+        
+        if(other instanceof Coin)
+        {
+            _score++;
+        }
     };
 };
 
