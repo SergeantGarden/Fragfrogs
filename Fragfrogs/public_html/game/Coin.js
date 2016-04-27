@@ -24,7 +24,11 @@ function Coin(position, rotation, scale, size, moveable)
     
     this.HandleCollision = function(other, side)
     {
-        delete this;
+        if(other instanceof Player)
+        {
+            this.active = false;
+            delete this;
+        }
     };
 };
 
