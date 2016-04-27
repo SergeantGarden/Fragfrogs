@@ -16,13 +16,11 @@
 
 function GameObject(position, rotation, scale, sprite, moveable)
 {
-    console.log(moveable);
     var _position = position || new Vector(0,0);
     var _rotation = rotation || 0;
     var _scale = scale || new Vector(1,1);
     if(typeof(moveable) !== "boolean") moveable = true;
     var _moveable = moveable;
-    console.log(_moveable);
     var _velocity = new Vector(0,0);
     var _active = true;
      
@@ -91,7 +89,7 @@ function GameObject(position, rotation, scale, sprite, moveable)
         this.sprite.Draw(context, this.position, this.rotation, this.scale);
     };
     
-    GameObject.prototype.HandleCollision = function(cO)
+    GameObject.prototype.HandleCollision = function(cO, collisionSide)
     {
         
     };

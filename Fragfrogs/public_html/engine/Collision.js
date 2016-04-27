@@ -71,53 +71,56 @@ Collision.CheckRectangleCircle = function(r, c)
     {
         
     }
-    return false;
+    return [false, "none", "none"];
 };
 
 Collision.CheckCircles = function(c1, c2)
 {
     if(c1.radius + c2.radius > c1.player.position.distanceToPoint(c2.player.position))
     {
-        return true;
+        return [true, "none", "none"];
     }
-    return false;
+    return [false, "none", "none"];
 };
 
 Collision.CheckRectangles = function(r1, r2)
 {
-    var yHit = r1.max.y > r2.min.y && r1.min.y < r2.max.y;
-    var xHit = r1.max.x > r2.min.x && r1.min.x < r2.max.x;
-    if(yHit && xHit)
+    if(r1.centerCornerLength + r2.centerCornerLength > r1.player.position.distanceToPoint(r2.player.position))
     {
-        var line1 = new LineSegment(new Vector(r1.player.position.x, r1.player.position.y), new Vector(r2.player.position.x, r2.player.position.y));
-        var line2 = new LineSegment(new Vector(r1.max.x, r1.min.y), new Vector(r1.max.x, r1.max.y));
-
-        if(line1.intersection(line2))
+        var yHit = r1.max.y > r2.min.y && r1.min.y < r2.max.y;
+        var xHit = r1.max.x > r2.min.x && r1.min.x < r2.max.x;
+        if(yHit && xHit)
         {
-            return true;//[true, "right", "left"];
-            //RIGHT
-        }
+            var line1 = new LineSegment(new Vector(r1.player.position.x, r1.player.position.y), new Vector(r2.player.position.x, r2.player.position.y));
+            var line2 = new LineSegment(new Vector(r1.max.x, r1.min.y), new Vector(r1.max.x, r1.max.y));
 
-        line2 = new LineSegment(new Vector(r1.min.x, r1.max.y), new Vector(r1.min.x, r1.min.y));
-        if(line1.intersection(line2))
-        {
-            return true;//[true, "left", "right"];
-            //LEFT
-        }
+            if(line1.intersection(line2))
+            {
+                return [true, "right", "left"];
+                //RIGHT
+            }
 
-        line2 = new LineSegment(new Vector(r1.min.x, r1.min.y), new Vector(r1.max.x, r1.min.y));
-        if(line1.intersection(line2))
-        {
-            return true;//[true, "top", "bottom"];
-            //TOP
-        }
+            line2 = new LineSegment(new Vector(r1.min.x, r1.max.y), new Vector(r1.min.x, r1.min.y));
+            if(line1.intersection(line2))
+            {
+                return [true, "left", "right"];
+                //LEFT
+            }
 
-        line2 = new LineSegment(new Vector(r1.min.x, r1.max.y), new Vector(r1.max.x, r1.max.y));
-        if(line1.intersection(line2))
-        {
-            return true;//[true, "bottom", "top"];
-            //BOTTOM
+            line2 = new LineSegment(new Vector(r1.min.x, r1.min.y), new Vector(r1.max.x, r1.min.y));
+            if(line1.intersection(line2))
+            {
+                return [true, "top", "bottom"];
+                //TOP
+            }
+
+            line2 = new LineSegment(new Vector(r1.min.x, r1.max.y), new Vector(r1.max.x, r1.max.y));
+            if(line1.intersection(line2))
+            {
+                return [true, "bottom", "top"];
+                //BOTTOM
+            }
         }
     }
-    return false;
+    return [false, "none", "none"];
 };

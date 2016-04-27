@@ -40,7 +40,6 @@ function Scene()
                 if(gameobject.moveable)
                 {
                     this.private._gameObjects[layer].moveable.push(gameobject);
-                    console.log(layer + " : " + this.private._gameObjects[layer].moveable.length);
                 }else
                 {
                     this.private._gameObjects[layer].immoveable.push(gameobject);
@@ -80,9 +79,11 @@ Scene.prototype.CheckCollision = function()
                         {
                             if(moveable[i].collision.type === COLLISION_TYPE.RECTANGLE)
                             {
-                                if(Collision.CheckRectangles(moveable[i].collision, moveable[j].collision))
+                                var collisionResult = Collision.CheckRectangles(moveable[i].collision, moveable[j].collision);
+                                if(collisionResult[0])
                                 {
-                                    console.log("collision");
+                                    moveable[i].HandleCollision(moveable[j], collisionResult[1]);
+                                    moveable[j].HandleCollision(moveable[i], collisionResult[2]);
                                 }
                             }
                         }
@@ -98,9 +99,11 @@ Scene.prototype.CheckCollision = function()
                         {
                             if(moveable[i].collision.type === COLLISION_TYPE.RECTANGLE)
                             {
-                                if(Collision.CheckRectangles(moveable[i].collision, immoveable[j].collision))
+                                var collisionResult = Collision.CheckRectangles(moveable[i].collision, immoveable[j].collision);
+                                if(collisionResult[0])
                                 {
-                                    console.log("collision");
+                                    moveable[i].HandleCollision(immoveable[j], collisionResult[1]);
+                                    immoveable[j].HandleCollision(moveable[i], collisionResult[2]);
                                 }
                             }
                         }
