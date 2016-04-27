@@ -51,7 +51,7 @@ GameScene = function(engine, playerOne, playerTwo)
                     this.AddGameObject(wallBlock, "game");
                     break;
                 case "2":
-                    var crop = new Crop(new Vector(width, height), 0, new Vector(1,1), tileSize);
+                    var crop = new Crop(new Vector(width, height), 0, new Vector(1,1), tileSize, this);
                     this.AddGameObject(crop, "game");
                     break;
             }

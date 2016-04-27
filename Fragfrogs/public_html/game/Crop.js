@@ -21,7 +21,7 @@ var CROP_STATE =
     FULLGROWN: 2
 };
 
-function Crop(position, rotation, scale, size)
+function Crop(position, rotation, scale, size, scene)
 {
     GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets["Crop"], size, 1), false);
     
@@ -30,6 +30,7 @@ function Crop(position, rotation, scale, size)
     
     var _regenTime = 10;
     var _state = CROP_STATE.FULLGROWN;
+    var _emitter = new Emitter(scene, new Vector(position.x, position.y));
     
     Object.defineProperty(this, "state", {
         get: function() { return _state; }
@@ -37,6 +38,7 @@ function Crop(position, rotation, scale, size)
     
     this.Update = function(input, dt)
     {
+        _emitter.Update(input, dt);
         GameObject.prototype.Update.call(this, input, dt);
     };
     
@@ -59,14 +61,28 @@ function Crop(position, rotation, scale, size)
                 _state = CROP_STATE.FULLGROWN;
             }
         }
+        _emitter.Draw(context);
         GameObject.prototype.Draw.call(this, context);
     };
     
-    this.HandleCollision = function(other)
+    this.HandleCollision = function(other, side)
     {
         if(this.state === CROP_STATE.FULLGROWN)
         {
-            console.log("crops");
+            var randomDrop = Math.ceil(Math.random() * 28);
+            var spawnFlyArray = [1,4,7,13,18];
+            var spawnCoinArray = [5,15,16];
+            
+            if(spawnCoinArray.indexOf(randomDrop) !== -1)
+            {
+                var coin = new Coin(this.position, this.rotation, this.scale, this.sprite.size, false);
+                Engine.currentGame["Fragfrogs"].currentScene.AddGameObject(coin, "game");
+            }else if(spawnFlyArray.indexOf(randomDrop) !== -1)
+            {
+                var fly = new Fly(this.position, this.rotation, this.scale, this.sprite.size);
+                Engine.currentGame["Fragfrogs"].currentScene.AddGameObject(fly, "game");
+            }
+            _emitter.EmitRandom(new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Leaf"]), 3, 0.75, new Vector(60,60));
         }
         _state = CROP_STATE.PICKED;
     };
