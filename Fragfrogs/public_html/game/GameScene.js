@@ -53,7 +53,7 @@ GameScene = function(engine, playerOne, playerTwo)
             switch(levelData[i])
             {
                 case "1":
-                    var wallBlock = new GameObject(new Vector(width, height), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Wall"]), false);
+                    var wallBlock = new WallBlock(new Vector(width, height), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Wall"]), false);
                     this.AddGameObject(wallBlock, "game");
                     break;
                 case "2":
