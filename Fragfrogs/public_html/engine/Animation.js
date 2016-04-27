@@ -74,7 +74,7 @@ function Animation(sprite, size, alpha)
             this.private._continuesPlaying = continues || false;
             this.private._currentFrameList = this.private._animationArray[name];
             speed = speed || 1;
-            this.private._ticksPerSecond = (this.private._currentFrameList.length) / speed;
+            this.private._ticksPerSecond = (this.private._currentFrameList.length - 1) / speed;
             this.currentFrame = 0;
             this.frameIndex = this.private._currentFrameList[this.currentFrame];
             this.private._playing = true;
