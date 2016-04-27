@@ -119,6 +119,17 @@ Scene.prototype.Update = function(input, dt)
     var that = this;
     for(var layer in this.private._gameObjects)
     {
+        this.private._gameObjects[layer].immoveable.forEach(function(entry)
+        {
+            if(entry === null || entry === undefined)
+            {
+                that.private._gameObjects[layer].splice(that.private._gameObjects[layer].indexOf(entry, 1));
+            }else if(entry.active)
+            {
+                entry.Update(input, dt);
+            }
+        });
+        
         this.private._gameObjects[layer].moveable.forEach(function(entry)
         {
             if(entry === null || entry === undefined)
@@ -133,17 +144,6 @@ Scene.prototype.Update = function(input, dt)
                 }
             }
         });
-
-        this.private._gameObjects[layer].immoveable.forEach(function(entry)
-        {
-            if(entry === null || entry === undefined)
-            {
-                that.private._gameObjects[layer].splice(that.private._gameObjects[layer].indexOf(entry, 1));
-            }else if(entry.active)
-            {
-                entry.Update(input, dt);
-            }
-        });
     }
 };
 
@@ -151,15 +151,15 @@ Scene.prototype.Draw = function(context)
 {
     for(var layer in this.private._gameObjects)
     {
-        this.private._gameObjects[layer].moveable.forEach(function(entry)
+        this.private._gameObjects[layer].immoveable.forEach(function(entry)
         {
             if(entry.active)
             {
                 entry.Draw(context);
             }
         });
-
-        this.private._gameObjects[layer].immoveable.forEach(function(entry)
+        
+        this.private._gameObjects[layer].moveable.forEach(function(entry)
         {
             if(entry.active)
             {
