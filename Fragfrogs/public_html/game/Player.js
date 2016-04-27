@@ -139,7 +139,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     function Shoot()
     {
-        _tongue.Fire(_facing, position , size);
+        _tongue.Fire(_facing, this.position , size);
         _specialAbility = false;
         _shooting = true;
     };
@@ -148,7 +148,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     {
         if(input.keyboard.keyDown(KEY_CODE.SPACE) && this.specialAbility)
         {
-            Shoot();
+            Shoot.call(this);
         }
         if(!this.shooting)
         {
@@ -182,7 +182,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     {
         if(input.keyboard.keyDown(KEY_CODE.FSLASH) && this.specialAbility && !_dashing)
         {
-            Shoot();
+            Shoot.call(this);
         }
         if(!this.shooting && !_dashing)
         {
@@ -277,7 +277,8 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     Respawn = function()
     {
         _specialAbility = false;
-        //this.position.set(GameState.spawnLocations[Math.ceil(Math.random() * GameState.spawnLocations.length - 1)]);
+        var spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];
+        this.position = new Vector(spawnLocation.x, spawnLocation.y);
         //this.sprite.flash(2, 0.3, 0.075);
     };
     

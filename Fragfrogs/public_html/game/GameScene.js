@@ -18,6 +18,8 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite)
 {
     Scene.call(this);
     
+    GameScene.spawnLocations = [];
+    
     var canvasSize = new Vector(400, 320);
     var tileSize = new Vector(16,16);
     var tiles = new Vector(parseInt(canvasSize.x / tileSize.x), parseInt((canvasSize.y - (2 * tileSize.y)) / tileSize.y));
@@ -58,6 +60,9 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite)
                 case "2":
                     var crop = new Crop(new Vector(width, height), 0, new Vector(1,1), tileSize, this);
                     this.AddGameObject(crop, "game");
+                    break;
+                case "3":
+                    GameScene.spawnLocations.push(new Vector(width, height));
                     break;
             }
         }
