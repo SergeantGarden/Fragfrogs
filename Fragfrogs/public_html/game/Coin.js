@@ -22,9 +22,9 @@ function Coin(position, rotation, scale, size, moveable)
     var _rotationTime = 0.6;
     this.sprite.Play("rotate", true, _rotationTime);
     
-    this.HandleCollision = function(other)
+    this.HandleCollision = function(other, side)
     {
-        
+        delete this;
     };
 };
 
