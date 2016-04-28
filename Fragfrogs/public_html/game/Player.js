@@ -82,6 +82,11 @@ function Player(player, scene, position, rotation, scale, imageName, size)
         get: function() { return _shooting; }
     });
     
+    Object.defineProperty(this, "dashing", {
+        get: function() { return _dashing; },
+        set: function(value) { if(typeof(value) === "boolean") _dashing = value;}
+    });
+    
     Object.defineProperty(this, "glow", {
         get: function() { return _glow; }
     });
@@ -146,11 +151,11 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     function PlayerOneUpdate(input, dt)
     {
-        if(input.keyboard.keyDown(KEY_CODE.SPACE) && this.specialAbility)
+        if(input.keyboard.keyDown(KEY_CODE.SPACE) && this.specialAbility && !this.dashing)
         {
             Shoot.call(this);
         }
-        if(!this.shooting)
+        if(!this.shooting && !this.dashing)
         {
             if(input.keyboard.keyDown(KEY_CODE.w))
             {
@@ -180,11 +185,11 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     function PlayerTwoUpdate(input, dt)
     {
-        if(input.keyboard.keyDown(KEY_CODE.FSLASH) && this.specialAbility && !_dashing)
+        if(input.keyboard.keyDown(KEY_CODE.FSLASH) && this.specialAbility && !this.dashing)
         {
             Shoot.call(this);
         }
-        if(!this.shooting && !_dashing)
+        if(!this.shooting && !this.dashing)
         {
             if(input.keyboard.keyDown(KEY_CODE.UP))
             {
@@ -284,7 +289,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     ResetDashing = function()
     {
-        _dashing = false;
+        this.dashing = false;
     };
     
     this.HandleCollision = function(other, side)
@@ -335,6 +340,23 @@ function Player(player, scene, position, rotation, scale, imageName, size)
                 break;
             case "right":
                 this.position.x = other.position.x - this.sprite.size.x;
+                break;
+            case "unknown":
+                switch(_facing)
+                {
+                case PLAYER_FACING.UP:
+                    this.position.y = other.position.y + this.sprite.size.y;
+                    break;
+                case PLAYER_FACING.DOWN:
+                    this.position.y = other.position.y - this.sprite.size.y;
+                    break;
+                case PLAYER_FACING.LEFT:
+                    this.position.x = other.position.x + this.sprite.size.x;
+                    break;
+                case PLAYER_FACING.RIGHT:
+                    this.position.x = other.position.x - this.sprite.size.x;
+                    break;
+                }
                 break;
             }
         }
