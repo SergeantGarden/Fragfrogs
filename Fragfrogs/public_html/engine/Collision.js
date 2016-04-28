@@ -120,6 +120,10 @@ Collision.CheckRectangles = function(r1, r2)
                 return [true, "bottom", "top"];
                 //BOTTOM
             }
+            if(r1.player.position.distanceToPoint(r2.player.position) < r1.size.x + r2.size.x)
+            {
+                return [true, "unkown", "unkown"];
+            }
         }
     }
     return [false, "none", "none"];

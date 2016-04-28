@@ -73,6 +73,7 @@ Scene.prototype.CheckCollision = function()
             {
                 for(var j = 0; j < moveable.length; j++)
                 {
+                    if(moveable[i] === moveable[j]) continue;
                     if(moveable[j].active && moveable[j].hasCollision)
                     {
                         if(moveable[j].collision.type === COLLISION_TYPE.RECTANGLE)
