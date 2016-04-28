@@ -294,7 +294,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     this.HandleCollision = function(other, side)
     {
-        if(other instanceof Crop)
+        if(other instanceof Crop && !this.shooting)
         {
             setTimeout(ResetDashing.bind(this), (_dashTimer * 1000));
             var extraSetBack = 0;
