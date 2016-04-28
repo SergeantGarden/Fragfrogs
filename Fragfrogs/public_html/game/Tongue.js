@@ -75,6 +75,11 @@ function Tongue(player, position, rotation, scale, size)
     {
         if(_shooting)
         {
+            if(this.position.x < 0) this.HandleCollision(null, "left");
+            if(this.position.x > Engine.currentGame["Fragfrogs"].originalResolution.x) this.HandleCollision(null, "right");
+            if(this.position.y < 0) this.HandleCollision(null, "up");
+            if(this.position.y > Engine.currentGame["Fragfrogs"].originalResolution.y) this.HandleCollision(null, "down");
+            
             if(this.velocity.x !== 0)
             {
                 if(this.velocity.x > 0)
@@ -115,6 +120,26 @@ function Tongue(player, position, rotation, scale, size)
     
     this.HandleCollision = function(other, side)
     {
+        if(other === null)
+        {
+            switch(side)
+            {
+                case "left":
+                case "right":
+                case "up":
+                case "down":
+                    if(!_retreating)
+                    {
+                        this.velocity = new Vector(-this.velocity.x, -this.velocity.y);
+                        _retreating = true;
+                    }else
+                    {
+                        _shooting = _retreating = false;
+                        this.active = false;
+                    }
+                    break;
+            }
+        }
         if(other instanceof WallBlock && !_retreating)
         {
             this.velocity = new Vector(-this.velocity.x, -this.velocity.y);
