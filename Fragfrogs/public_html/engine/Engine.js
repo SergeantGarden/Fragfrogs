@@ -20,6 +20,7 @@ function Engine(resolution, title, canvasParent)
 {
     Engine.currentGame[title] = { gameAssets: {},
                                   resolution: resolution,
+                                  originalResolution: resolution,
                                   currentScene: null,
                                   loadingScene: null};
 
@@ -233,6 +234,7 @@ function Engine(resolution, title, canvasParent)
         engine.resizeScale = scale;
         engine.canvas.width = newResolution.x;
         engine.canvas.height = newResolution.y;
+        Engine.currentGame[this.gameTitle].resolution = { x: newResolution.x, y: newResolution.y };
     };
     
     engine.ZoomIn = function(scale)
