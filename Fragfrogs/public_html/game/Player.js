@@ -138,7 +138,6 @@ function Player(player, scene, position, rotation, scale, imageName, size)
         {
             this.glow.Update(dt);
         }
-        
         GameObject.prototype.Update.call(this, input, dt);
     };
     
