@@ -277,9 +277,9 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     Respawn = function()
     {
         _specialAbility = false;
+        this.sprite.Flash(2, 0.3, 0.05);
         var spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];
         this.position = new Vector(spawnLocation.x, spawnLocation.y);
-        //this.sprite.flash(2, 0.3, 0.075);
     };
     
     ResetDashing = function()
@@ -341,7 +341,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
         
         if(other instanceof Tongue)
         {
-            if(other !== this.tongue)
+            if(other !== this.tongue && !this.sprite.isFlashing)
             {
                 Respawn.call(this);
             }else

@@ -19,9 +19,12 @@ function Animation(sprite, size, alpha)
     var _private = {};
     _private._sprite = sprite;
     _private._size = size || new Vector(sprite.width, sprite.height);
-    _private._alpha = alpha || 1;
-    _private._flashAlpha = 0;
+    _private._alpha = alpha || 1.0;
+    _private._flashAlpha = 0.0;
     _private._originalAlpha = _private._alpha;
+    _private._flashing = false;
+    _private._flashTimer = 0;
+    _private._flashInterval = 0;
     
     _private._tickCount = 0.0001;
     _private._playing = false;
@@ -40,7 +43,7 @@ function Animation(sprite, size, alpha)
     
     Object.defineProperty(this, "alpha", {
         get: function() { return _private._alpha; },
-        set: function(value) { if( $.isNumeric(value) && value <= 1 && value >= 0) _private._alpha = _private._originalAlpha = value; }
+        set: function(value) { if( $.isNumeric(value) && value <= 1 && value >= 0) _private._alpha = value; }
     });
     
     Object.defineProperty(this, "frameIndex", {
@@ -55,6 +58,11 @@ function Animation(sprite, size, alpha)
     
     Object.defineProperty(this, "isPlaying", {
         get: function() { return _private._playing; },
+        set: function(value) { console.log("cannot set property isPlaying"); }
+    });
+    
+    Object.defineProperty(this, "isFlashing", {
+        get: function() { return _private._flashing; },
         set: function(value) { console.log("cannot set property isPlaying"); }
     });
     
@@ -86,20 +94,20 @@ function Animation(sprite, size, alpha)
         this.private._playing = false;
     };
     
-    StopFlash = function(interval)
+    StopFlash = function()
     {
-        clearInterval(interval);
-        this.alpha = _private._originalAlpha;
+        this.private._flashing = false;
+        this.alpha = this.private._originalAlpha;
     };
     
     Flashing = function()
     {
-        if(this.alpha === _private._flashAlpha)
+        if(this.alpha === this.private._flashAlpha)
         {
-            this.alpha = _private._originalAlpha;
+            this.alpha = this.private._originalAlpha;
         }else
         {
-            this.alpha = _private._flashAlpha;
+            this.alpha = this.private._flashAlpha;
         }
     };
     
@@ -107,9 +115,9 @@ function Animation(sprite, size, alpha)
     {
         time = time || 1;
         this.private._flashAlpha = alpha || 0.5;
-        intervalTime = intervalTime || 0.5;
-        var interval = setInterval(Flashing, intervalTime * 1000);
-        setTimeout(StopFlash.bind(this, interval), time * 1000);
+        this.private._flashInterval = intervalTime;
+        this.private._flashing = true;
+        setTimeout(StopFlash.bind(this), time * 1000);
     };
     
     Animation.prototype.Update = function(dt)
@@ -133,6 +141,15 @@ function Animation(sprite, size, alpha)
                         this.private._playing = false;
                     }
                 }
+            }
+        }
+        if(this.private._flashing)
+        {
+            this.private._flashTimer += dt;
+            if(this.private._flashTimer >= this.private._flashInterval)
+            {
+                this.private._flashTimer = 0;
+                Flashing.call(this);
             }
         }
     };
