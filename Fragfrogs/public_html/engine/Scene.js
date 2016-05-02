@@ -31,6 +31,35 @@ function Scene()
         }
     };
     
+    this.RemoveGameObject = function(gameObject, layer)
+    {
+        if(gameObject !== null || gameObject !== undefined)
+        {
+            if(this.private._gameObjects.hasOwnProperty(layer))
+            {
+                var arrayType = 0;
+                var index = this.private._gameObjects[layer].moveable.indexOf(gameObject);
+                
+                if(index === -1) 
+                {
+                    arrayType = 1;
+                    index = this.private._gameObjects[layer].immoveable.indexOf(gameObject);
+                }
+                
+                if(index !== -1)
+                {
+                    if(arrayType === 0)
+                    {
+                        this.private._gameObjects[layer].moveable.splice(index, 1);
+                    }else if(arrayType === 1)
+                    {
+                        this.private._gameObjects[layer].immoveable.splice(index, 1);
+                    }
+                }
+            }
+        }
+    };
+    
     this.AddGameObject = function(gameobject, layer)
     {
         if(this.private._gameObjects.hasOwnProperty(layer))
