@@ -75,7 +75,7 @@ function Crop(position, rotation, scale, size, scene)
             
             if(spawnCoinArray.indexOf(randomDrop) !== -1)
             {
-                var coin = new Coin(this.position, this.rotation, this.scale, this.sprite.size, false);
+                var coin = new Coin(this.position, this.rotation, this.scale, this.sprite.size);
                 Engine.currentGame["Fragfrogs"].currentScene.AddGameObject(coin, "game");
             }else if(spawnFlyArray.indexOf(randomDrop) !== -1)
             {

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-function Coin(position, rotation, scale, size, moveable)
+function Coin(position, rotation, scale, size)
 {
-    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets["Coin"], size, 1), moveable);
+    GameObject.call(this, position, rotation, scale, new Animation(Engine.currentGame["Fragfrogs"].gameAssets["Coin"], size, 1), false);
     this.sprite.AddAnimation("rotate", [0,1,2,3]);
     
     var _rotationTime = 0.6;
