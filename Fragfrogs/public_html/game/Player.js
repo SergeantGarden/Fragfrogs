@@ -278,17 +278,73 @@ function Player(player, scene, position, rotation, scale, imageName, size)
         GameObject.prototype.Draw.call(this, context);
     };
     
-    Respawn = function()
+    this.Respawn = function(check)
     {
-        _specialAbility = false;
-        this.sprite.Flash(2, 0.3, 0.05);
-        var spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];
-        this.position = new Vector(spawnLocation.x, spawnLocation.y);
+        if(check instanceof Tongue && check !== this.tongue)
+        {
+            _specialAbility = false;
+            this.sprite.Flash(2, 0.3, 0.05);
+            var spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];
+            this.position = new Vector(spawnLocation.x, spawnLocation.y);
+        }
     };
     
     ResetDashing = function()
     {
         this.dashing = false;
+    };
+    
+    this.LoseCoins = function(position, check)
+    {
+        if(check instanceof Tongue && this.tongue !== check)
+        {
+            var losingCoinAmount = Math.floor(this.score / 2);
+            _score -= losingCoinAmount;
+            for(var i = 0; i < losingCoinAmount; i++)
+            {
+                var coinPosition = new Vector(position.x, position.y);
+                switch(Math.round(Math.random() * 8))
+                {
+                    case 0:
+                        coinPosition.x -= this.sprite.size.x * Math.round(Math.random() * 3);
+                        break;
+                    case 1:
+                        var spots = Math.round(Math.random() * 3);
+                        coinPosition.x -= this.sprite.size.x * spots;
+                        coinPosition.y -= this.sprite.size.y * spots;
+                        break;
+                    case 2:
+                        coinPosition.y -= this.sprite.size.y * Math.round(Math.random() * 3);
+                        break;
+                    case 3:
+                        var spots = Math.round(Math.random() * 3);
+                        coinPosition.x += this.sprite.size.x * spots;
+                        coinPosition.y -= this.sprite.size.y * spots;
+                        break;
+                    case 4:
+                        coinPosition.x += this.sprite.size.x * Math.round(Math.random() * 3);
+                        break;
+                    case 5:
+                        var spots = Math.round(Math.random() * 3);
+                        coinPosition.x += this.sprite.size.x * spots;
+                        coinPosition.y += this.sprite.size.y * spots;
+                        break;
+                    case 6:
+                        coinPosition.y += this.sprite.size.y * Math.round(Math.random() * 3);
+                        break;
+                    case 7:
+                        var spots = Math.round(Math.random() * 3);
+                        coinPosition.x -= this.sprite.size.x * spots;
+                        coinPosition.y += this.sprite.size.y * spots;
+                        break;
+                    case 8:
+                        break;
+                }
+
+                var coin = new Coin(coinPosition, this.rotation, this.scale, this.sprite.size);
+                Engine.currentGame["Fragfrogs"].currentScene.AddGameObject(coin, "game");
+            }
+        }
     };
     
     this.HandleCollision = function(other, side)
@@ -364,7 +420,8 @@ function Player(player, scene, position, rotation, scale, imageName, size)
         {
             if(other !== this.tongue && !this.sprite.isFlashing)
             {
-                Respawn.call(this);
+                this.LoseCoins(this.position, other);
+                this.Respawn(other);
             }else
             {
                 _shooting = false;
