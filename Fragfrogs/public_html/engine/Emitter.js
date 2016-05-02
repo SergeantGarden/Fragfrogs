@@ -46,11 +46,13 @@ function Emitter(scene, position)
         var that = this;
         this.particles.forEach(function(entry)
         {
-            entry.Update(dt);
             if(!entry.alive)
             {
                 that.particles.splice(that.particles.indexOf(entry), 1);
-                delete entry;
+                that.scene.RemoveGameObject(entry, "foreground");
+            }else
+            {
+                entry.Update(dt);
             }
         });
     };

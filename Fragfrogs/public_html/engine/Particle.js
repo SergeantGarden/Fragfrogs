@@ -22,25 +22,30 @@ function Particle(sprite, position, lifeDuration, velocity)
     var _alive = true;
     
     Object.defineProperty(this, "alive", {
-        get: function() { return _alive; }
+        get: function() { return _alive; },
+        set: function(value) { if(typeof(value) === "boolean") _alive = value; }
+    });
+    
+    Object.defineProperty(this, "lifeDuration", {
+        get: function() { return _lifeDuration; }
     });
     
     this.velocity = new Vector(velocity.x, velocity.y);
-    setTimeout(Die.bind(this), _lifeDuration * 1000);
+    setTimeout(Die.bind(this), this.lifeDuration * 1000);
     
     function Die()
     {
-        _alive = false;
+        this.alive = false;
     }
     
     Particle.prototype.Update = function(input, dt)
     {
-        if(_alive) GameObject.prototype.Update.call(this, input, dt);
+        if(this.alive) GameObject.prototype.Update.call(this, input, dt);
     };
     
     Particle.prototype.Draw = function(context)
     {
-        if(_alive) GameObject.prototype.Draw.call(this, context);
+        if(this.alive) GameObject.prototype.Draw.call(this, context);
     };
 };
 
