@@ -69,6 +69,17 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite)
     };
     
     LoadLevel.call(this, 1);
+    
+    var spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];
+    playerOne.position = new Vector(spawnLocation.x, spawnLocation.y);
+    var i = 0;
+    while(spawnLocation.x === playerOne.position.x && spawnLocation.y === playerOne.position.y || i > 10)
+    {
+        i++;
+        spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];
+    }
+    playerTwo.position = new Vector(spawnLocation.x, spawnLocation.y);
+    
     this.AddGameObject(playerOne, "game");
     this.AddGameObject(playerTwo, "game");
 };
