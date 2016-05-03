@@ -31,7 +31,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     var _tongue = new Tongue(_player, this.position, this.rotation, this.scale, new Vector(6,6));
     var _facing = PLAYER_FACING.DOWN;
     var _speed = 75;
-    var _specialAbility = true;
+    var _specialAbility = false;
     var _shooting = false;
     var _dashing = false;
     var _dashTimer = 0.2;
