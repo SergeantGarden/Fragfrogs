@@ -258,9 +258,11 @@ function Engine(resolution, title, canvasParent)
     engine.switchScene = function(scene, keepScene)
     {
         engine.pauseGame();
-        oldScene = Engine.currentGame[engine.gameTitle].currentScene;
+        if(keepScene)
+        {
+            oldScene = Engine.currentGame[engine.gameTitle].currentScene;
+        }
         Engine.currentGame[engine.gameTitle].currentScene = scene;
-        if(!keepScene) delete oldScene;
         engine.unpauseGame();
     };
     
