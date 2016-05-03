@@ -35,6 +35,19 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite)
     GameScene.prototype.Update = function(input, dt)
     {
         scoreBar.UpdateText(playerOne.score, playerTwo.score);
+        
+        var scene = null;
+        if(playerOne.score >= 10)
+        {
+            console.log("player 1 won!");
+            scene = new EndScene(engine, playerOneSprite);
+            engine.switchScene(scene, false);
+        }else if(playerTwo.score >= 10)
+        {
+            console.log("player 2 won!");
+            scene = new EndScene(engine, playerTwoSprite);
+            engine.switchScene(scene, false);
+        }
         Scene.prototype.Update.call(this, input, dt);
     };
     
