@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-GameScene = function(engine, playerOneSprite, playerTwoSprite)
+GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
 {
     Scene.call(this);
     
@@ -81,7 +81,7 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite)
         }
     };
     
-    LoadLevel.call(this, 1);
+    LoadLevel.call(this, level);
     
     var spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];
     playerOne.position = new Vector(spawnLocation.x, spawnLocation.y);

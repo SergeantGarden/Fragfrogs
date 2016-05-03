@@ -23,7 +23,7 @@ function MenuScene(engine)
         if(input.keyboard.keyDown(KEY_CODE.SPACE))
         {
             console.log("MenuScene");
-            var scene = new GameScene(engine, "PlayerGreen", "PlayerRed");
+            var scene = new GameScene(engine, "PlayerGreen", "PlayerRed", 1);
             engine.switchScene(scene, true);
         }
     };
