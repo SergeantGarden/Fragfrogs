@@ -19,6 +19,7 @@ Engine.currentGame = {};
 function Engine(resolution, title, canvasParent)
 {
     Engine.currentGame[title] = { gameAssets: {},
+                                  gameAudio: {},
                                   resolution: resolution,
                                   originalResolution: resolution,
                                   currentScene: null,
@@ -203,6 +204,8 @@ function Engine(resolution, title, canvasParent)
     function normalizeAssets(arg)
     {
         var assetArray = {};
+        assetArray.images = {};
+        assetArray.audio = {};
         arg = engine.normalizeArg(arg);
         
         for(var i = 0; i < arg.length; i++)
@@ -210,13 +213,32 @@ function Engine(resolution, title, canvasParent)
             if(arg[i].indexOf(":") !== -1)
             {
                 var subArray = arg[i].split(":");
-                if(!engine.isUndefined(assetArray[subArray[0]]))
+                switch(subArray[1].split(".")[1])
                 {
-                    console.log("Warning: asset with duplicate name," + subArray[0] + " " + subArray[1] + " asset not loaded");
-                }else
-                {
-                    assetArray[subArray[0]] = subArray[1];
+                    case "png":
+                    case "jpeg":
+                    case "jpg":
+                        if(!engine.isUndefined(assetArray.images[subArray[0]]))
+                        {
+                            console.log("Warning: asset with duplicate name," + subArray[0] + " " + subArray[1] + " asset not loaded");
+                        }else
+                        {
+                            assetArray.images[subArray[0]] = subArray[1];
+                        }
+                        break;
+                    case "mp3":
+                    case "wav":
+                    case "ogg":
+                        if(!engine.isUndefined(assetArray.audio[subArray[0]]))
+                        {
+                            console.log("Warning: asset with duplicate name," + subArray[0] + " " + subArray[1] + " asset not loaded");
+                        }else
+                        {
+                            assetArray.audio[subArray[0]] = subArray[1];
+                        }
+                        break;
                 }
+                
             }else
             {
                 console.log("Error: assets are invalid");
@@ -301,9 +323,13 @@ function Engine(resolution, title, canvasParent)
         
         if(assets !== false)
         {
-            for(var key in assets)
+            for(var key in assets.images)
             {
-                Engine.currentGame[engine.gameTitle].gameAssets[key] = loadImage(assets[key], key);
+                Engine.currentGame[engine.gameTitle].gameAssets[key] = loadImage(assets.images[key], key);
+            }
+            for(var key in assets.audio)
+            {
+                Engine.currentGame[engine.gameTitle].gameAudio[key] = loadAudio(assets.audio[key], key);
             }
         }else
         {
@@ -311,6 +337,18 @@ function Engine(resolution, title, canvasParent)
             return false;
         }
     };
+    
+    function loadAudio(soundUrl, key)
+    {
+        assetsPreloading++;
+        var audio = new Audio(soundUrl);
+        audio.onloadeddata = function()
+        {
+            assetsLoaded++;
+        };
+        
+        return audio;
+    }
     
     function loadImage(imageUrl, key)
     {
