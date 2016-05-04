@@ -18,6 +18,7 @@ Engine.currentGame = {};
 
 function Engine(resolution, title, canvasParent)
 {
+    Engine.audioVolume = 1;
     Engine.currentGame[title] = { gameAssets: {},
                                   gameAudio: {},
                                   resolution: resolution,
@@ -122,7 +123,12 @@ function Engine(resolution, title, canvasParent)
             
             Engine.currentGame[engine.gameTitle].currentScene.Update(engine.input, dt/1000);
             Draw(engine.canvas.getContext('2d'));
-            if(engine.input !== null) engine.input.Update(dt/1000);
+            if(engine.input !== null) 
+            {
+                if(engine.input.keyboard.keyPressed(KEY_CODE.PLUS)) Engine.SetAudioVolume((Engine.audioVolume + 0.1));
+                if(engine.input.keyboard.keyPressed(KEY_CODE.SUBTRACT)) Engine.SetAudioVolume((Engine.audioVolume - 0.1));
+                engine.input.Update(dt/1000);
+            }
             engine.lastFrame = now;
         };
         scheduleFrame(engine.gameLoopCallback);
@@ -158,47 +164,101 @@ function Engine(resolution, title, canvasParent)
         }
     };
     
-    engine.isString = function(obj)
+    Engine.isString = function(obj)
     {
         return typeof obj === "string";
     };
     
-    engine.isArray = function(obj)
+    Engine.isArray = function(obj)
     {
         return Object.prototype.toString.call(obj) === '[object Array]';
     };
     
-    engine.isNumber = function(obj)
+    Engine.isNumber = function(obj)
     {
         return Object.prototype.toString.call(obj) === '[object Number]';
     };
     
-    engine.isFunction = function(obj)
+    Engine.isFunction = function(obj)
     {
         return Object.prototype.toString.call(obj) === '[object Function]';
     };
     
-    engine.isObject = function(obj)
+    Engine.isObject = function(obj)
     {
         return Object.prototype.toString.call(obj) === '[object Object]';
     };
     
-    engine.isUndefined = function(obj)
+    Engine.isUndefined = function(obj)
     {
         return obj === void 0;
     };
     
-    engine.normalizeArg = function(arg)
+    Engine.normalizeArg = function(arg)
     {
-        if(engine.isString(arg))
+        if(Engine.isString(arg))
         {
             arg = arg.replace(/\s+/g, '').split(",");
         }
-        if(!engine.isArray(arg))
+        if(!Engine.isArray(arg))
         {
             arg = [arg];
         }
         return arg;
+    };
+    
+    Engine.SetAudioVolume = function(volume)
+    {
+        if(!Engine.isNumber(volume))
+        {
+            volume = 1;
+        }else if(volume > 1)
+        {
+            volume = 1;
+        }else if(volume < 0)
+        {
+            volume = 0;
+        }
+        Engine.audioVolume = volume;
+        
+        for(var game in Engine.currentGame)
+        {
+            for(var audioFile in Engine.currentGame[game].gameAudio)
+            {
+                var audio = Engine.currentGame[game].gameAudio[audioFile];
+                audio.file.volume = audio.volume * Engine.audioVolume;
+            }
+        }
+    };
+    
+    Engine.PlayAudio = function(gameTitle, audio, volume)
+    {
+        if(!Engine.isUndefined(Engine.currentGame[gameTitle]))
+        {
+            if(!Engine.isUndefined(Engine.currentGame[gameTitle].gameAudio[audio]))
+            {
+                if(!Engine.isNumber(volume))
+                {
+                    volume = 1;
+                }else if(volume > 1)
+                {
+                    volume = 1;
+                }else if(volume < 0)
+                {
+                    volume = 0;
+                }
+                var audioFile = Engine.currentGame[gameTitle].gameAudio[audio];
+                audioFile.volume = volume;
+                audioFile.file.volume = (volume * Engine.audioVolume);
+                audioFile.file.play();
+            }else
+            {
+                console.log("No audio found under the name: " + audio);
+            }
+        }else
+        {
+            console.log("No game found under the name: " + gameTitle);
+        }
     };
     
     function normalizeAssets(arg)
@@ -206,7 +266,7 @@ function Engine(resolution, title, canvasParent)
         var assetArray = {};
         assetArray.images = {};
         assetArray.audio = {};
-        arg = engine.normalizeArg(arg);
+        arg = Engine.normalizeArg(arg);
         
         for(var i = 0; i < arg.length; i++)
         {
@@ -218,7 +278,7 @@ function Engine(resolution, title, canvasParent)
                     case "png":
                     case "jpeg":
                     case "jpg":
-                        if(!engine.isUndefined(assetArray.images[subArray[0]]))
+                        if(!Engine.isUndefined(assetArray.images[subArray[0]]))
                         {
                             console.log("Warning: asset with duplicate name," + subArray[0] + " " + subArray[1] + " asset not loaded");
                         }else
@@ -229,7 +289,7 @@ function Engine(resolution, title, canvasParent)
                     case "mp3":
                     case "wav":
                     case "ogg":
-                        if(!engine.isUndefined(assetArray.audio[subArray[0]]))
+                        if(!Engine.isUndefined(assetArray.audio[subArray[0]]))
                         {
                             console.log("Warning: asset with duplicate name," + subArray[0] + " " + subArray[1] + " asset not loaded");
                         }else
@@ -298,7 +358,7 @@ function Engine(resolution, title, canvasParent)
     
     engine.PreloadScripts = function(scripts)
     {
-        scripts  = engine.normalizeArg(scripts);
+        scripts  = Engine.normalizeArg(scripts);
         
         if(scripts !== false)
         {
@@ -341,11 +401,13 @@ function Engine(resolution, title, canvasParent)
     function loadAudio(soundUrl, key)
     {
         assetsPreloading++;
-        var audio = new Audio(soundUrl);
-        audio.onloadeddata = function()
+        var audio = {};
+        audio.file = new Audio(soundUrl);
+        audio.file.onloadeddata = function()
         {
             assetsLoaded++;
         };
+        audio.volume = 1;
         
         return audio;
     }
