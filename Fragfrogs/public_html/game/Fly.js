@@ -22,6 +22,7 @@ function Fly(position, rotation, scale, size)
     {
         if(other instanceof Player)
         {
+            Engine.PlayAudio("Fragfrogs", "Fly", 0.5);
             this.active = false;
             delete this;
         }

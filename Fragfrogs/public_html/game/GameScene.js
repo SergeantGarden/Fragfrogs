@@ -31,6 +31,7 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
     this.AddGameObject(new GameObject(new Vector(200,144), 0, new Vector(1,1), new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["BG"]), false), "background");
     var scoreBar = new ScoreBar(playerOneSprite, playerTwoSprite, new Vector(0, tiles.y * tileSize.y), 0, new Vector(1,1), new Vector(canvasSize.x, 32), tileSize, false);
     this.AddGameObject(scoreBar, "foreground");
+    Engine.PlayAudio("Fragfrogs", "GameSound", 0.1);
     
     GameScene.prototype.Update = function(input, dt)
     {

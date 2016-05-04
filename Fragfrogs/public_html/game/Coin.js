@@ -26,6 +26,7 @@ function Coin(position, rotation, scale, size)
     {
         if(other instanceof Player)
         {
+            Engine.PlayAudio("Fragfrogs", "Coin", 0.5);
             this.active = false;
             delete this;
         }

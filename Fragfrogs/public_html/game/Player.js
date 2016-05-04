@@ -282,6 +282,7 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     {
         if(check instanceof Tongue && check !== this.tongue)
         {
+            Engine.PlayAudio("Fragfrogs", "Die", 1);
             _specialAbility = false;
             this.sprite.Flash(2, 0.3, 0.05);
             var spawnLocation = GameScene.spawnLocations[Math.ceil(Math.random() * GameScene.spawnLocations.length - 1)];

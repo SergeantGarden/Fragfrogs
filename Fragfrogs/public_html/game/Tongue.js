@@ -41,6 +41,7 @@ function Tongue(player, position, rotation, scale, size)
     
     this.Fire = function(facing, position, playerSize)
     {
+        Engine.PlayAudio("Fragfrogs", "Tongue", 0.5);
         _playerPosition = new Vector(position.x, position.y);
         _playerSize = new Vector(playerSize.x, playerSize.y);
         

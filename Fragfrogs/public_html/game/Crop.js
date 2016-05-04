@@ -69,6 +69,7 @@ function Crop(position, rotation, scale, size, scene)
     {
         if(this.state === CROP_STATE.FULLGROWN)
         {
+            Engine.PlayAudio("Fragfrogs", "Dash", 1);
             var randomDrop = Math.ceil(Math.random() * 28);
             var spawnFlyArray = [1,4,7,13,18];
             var spawnCoinArray = [5,15,16];
