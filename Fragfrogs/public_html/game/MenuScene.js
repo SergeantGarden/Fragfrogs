@@ -14,13 +14,40 @@
  * limitations under the License.
  */
 
+var MENUSTATE =
+{
+    MainMenu:0,
+    Instructions: 1,
+    PickLevel: 2,
+    PickCharacter: 3,
+    ReadyCheck: 4
+};
+
+var PLAYER_PICKS =
+{
+    green: "PlayerGreen",
+    brown: "PlayerBrown",
+    blue: "PlayerBlue",
+    gray: "PlayerGray",
+    pink: "PlayerPink",
+    red: "PlayerRed",
+    skyBlue: "PlayerSkyBlue",
+    yellow: "PlayerYellow"
+};
+
 function MenuScene(engine)
 {
     Scene.call(this);
     
-    var levelChosen = -1;
-    var playerOneChoice = "None";
-    var playerTwoChoice = "None";
+    var currentMenuState = MENUSTATE.MainMenu;
+    var mainMenuChoice = 0;
+    
+    var playerOneReady = false;
+    var playerTwoReady = false;
+    
+    var levelChosen = 0;
+    var playerOneChoice = PLAYER_PICKS.green;
+    var playerTwoChoice = PLAYER_PICKS.brown;
     
     var fragfrogsLogo = new Sprite(Engine.currentGame[engine.gameTitle].gameAssets["MainLogo"]);
     var startButton = new Sprite(Engine.currentGame[engine.gameTitle].gameAssets["Start"]);
@@ -44,12 +71,105 @@ function MenuScene(engine)
     var playerChoiceOne = new Sprite(Engine.currentGame[engine.gameTitle].gameAssets["ChoiceGreen"]);
     var playerChoiceTwo = new Sprite(Engine.currentGame[engine.gameTitle].gameAssets["ChoiceBrown"]);
     
+    var levels = [];
+    levels[0] = LoadLevel(1, new Vector(10,10));
+    levels[1] = LoadLevel(2, new Vector(10,10));
+    levels[2] = LoadLevel(3, new Vector(10,10));
+    
     MenuScene.prototype.Update = function(input, dt)
     {
+        switch(currentMenuState)
+        {
+            case MENUSTATE.MainMenu:
+                if(input.keyboard.keyPressed(KEY_CODE.SPACE) || input.keyboard.keyPressed(KEY_CODE.ENTER))
+                {
+                    if(mainMenuChoice === 0)
+                    {
+                        currentMenuState = MENUSTATE.PickLevel;
+                    }else if(mainMenuChoice === 1)
+                    {
+                        currentMenuState = MENUSTATE.Instructions;
+                    }
+                }
+                
+                if(input.keyboard.keyPressed(KEY_CODE.w) || input.keyboard.keyPressed(KEY_CODE.UP))
+                {
+                    mainMenuChoice--;
+                    if(mainMenuChoice < 0) mainMenuChoice = 1;
+                }else if(input.keyboard.keyPressed(KEY_CODE.s) || input.keyboard.keyPressed(KEY_CODE.DOWN))
+                {
+                    mainMenuChoice++;
+                    if(mainMenuChoice > 1) mainMenuChoice = 0;
+                }
+                break;
+            case MENUSTATE.Instructions:
+                if(input.keyboard.keyPressed(KEY_CODE.SPACE) || input.keyboard.keyPressed(KEY_CODE.ENTER) || input.keyboard.keyPressed(KEY_CODE.ESCAPE))
+                {
+                    currentMenuState = MENUSTATE.MainMenu;
+                }
+                break;
+            case MENUSTATE.PickLevel:
+                if(input.keyboard.keyPressed(KEY_CODE.d) || input.keyboard.keyPressed(KEY_CODE.RIGHT))
+                {
+                    levelChosen++;
+                    if(levelChosen >= levels.length) levelChosen = 0;
+                }else if(input.keyboard.keyPressed(KEY_CODE.a) || input.keyboard.keyPressed(KEY_CODE.LEFT))
+                {
+                    levelChosen--;
+                    if(levelChosen < 0) levelChosen = levels.length -1;
+                }
+                
+                if(input.keyboard.keyPressed(KEY_CODE.SPACE) || input.keyboard.keyPressed(KEY_CODE.ENTER))
+                {
+                    currentMenuState = MENUSTATE.PickCharacter;
+                }else if(input.keyboard.keyPressed(KEY_CODE.ESCAPE))
+                {
+                    currentMenuState = MENUSTATE.MainMenu;
+                }
+                
+                break;
+            case MENUSTATE.PickCharacter:
+                if(input.keyboard.keyPressed(KEY_CODE.SPACE) || input.keyboard.keyPressed(KEY_CODE.ENTER))
+                {
+                    currentMenuState = MENUSTATE.ReadyCheck;
+                }
+                
+                if(input.keyboard.keyPressed(KEY_CODE.ESCAPE))
+                {
+                    playerOneChoice = PLAYER_PICKS.green;
+                    playerTwoChoice = PLAYER_PICKS.brown;
+                    currentMenuState = MENUSTATE.PickLevel ;
+                }
+                break;
+            case MENUSTATE.ReadyCheck:
+                if(input.keyboard.keyPressed(KEY_CODE.SPACE))
+                {
+                    playerOneReady = !playerOneReady;
+                }
+                
+                if(input.keyboard.keyPressed(KEY_CODE.FSLASH))
+                {
+                    playerTwoReady = !playerTwoReady;
+                }
+                
+                if(input.keyboard.keyPressed(KEY_CODE.ESCAPE))
+                {
+                    playerOneReady = false;
+                    playerTwoReady = false;
+                    currentMenuState = MENUSTATE.PickCharacter;
+                }
+                
+                if(playerOneReady && playerTwoReady)
+                {
+                    var scene = new GameScene(engine, playerOneChoice, playerTwoChoice, levelChosen + 1);
+                    engine.switchScene(scene, true);
+                }
+                break;
+        }
+        
         if(input.keyboard.keyDown(KEY_CODE.SPACE))
         {
-            var scene = new GameScene(engine, "PlayerGreen", "PlayerRed", 1);
-            engine.switchScene(scene, true);
+            
         }
     };
     
@@ -60,11 +180,50 @@ function MenuScene(engine)
         context.fillRect(0, 0, Engine.currentGame[engine.gameTitle].originalResolution.x, Engine.currentGame[engine.gameTitle].originalResolution.y);
         context.restore();
         
-        //DrawMainMenu(context);
-        //DrawControls(context);
-        //DrawLevelChoice(context);
-        //DrawPlayerChoice(context);
-        //DrawReadyCheck(context);
+        switch(currentMenuState)
+        {
+            case MENUSTATE.MainMenu:
+                DrawMainMenu(context);
+                break;
+            case MENUSTATE.Instructions:
+                DrawControls(context);
+                break;
+            case MENUSTATE.PickLevel:
+                DrawLevelChoice(context);
+                break;
+            case MENUSTATE.PickCharacter:
+                DrawPlayerChoice(context);
+                break;
+            case MENUSTATE.ReadyCheck:
+                DrawReadyCheck(context);
+                break;
+        }
+    };
+    
+    function LoadLevel(level, size)
+    {
+        var levelData = ReadFile("levels/Scene_" + level + ".txt");
+        var spriteList = [];
+        for(var i = 0; i < levelData.length; i++)
+        {
+            var startWidth = 75;
+            var startHeight = 20;
+            var height = startHeight + (Math.floor((i / 25)) * size.y) + (size.y / 2);
+            var width = startWidth + ((i % 25) * size.x) + (size.x / 2);
+            
+            switch(levelData[i])
+            {
+                case "1":
+                    spriteList.push({ position: new Vector(width, height), sprite: new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Wall"], size, 1), scale: new Vector(1,1) });
+                    break;
+                case "2":
+                    var crop = new Animation(Engine.currentGame["Fragfrogs"].gameAssets["Crop"], new Vector(16,16), 1);
+                    crop.frameIndex = 3;
+                    spriteList.push({ position: new Vector(width, height), sprite: crop, scale: new Vector(size.x/16, size.y/16) });
+                    break;
+            }
+        }
+        return spriteList;
     };
     
     function DrawMainMenu(context)
@@ -78,6 +237,13 @@ function MenuScene(engine)
     {
         arrow.Draw(context, new Vector(370, 110), 0, new Vector(0.5,1));
         arrow.Draw(context, new Vector(30, 110), 180, new Vector(0.5,1));
+
+        for(var i = 0; i < levels[levelChosen].length; i++)
+        {
+            context.save();
+            levels[levelChosen][i].sprite.Draw(context, levels[levelChosen][i].position, 0, levels[levelChosen][i].scale);
+            context.restore();
+        }
         
         context.save();
         context.font = "10px Arial";
