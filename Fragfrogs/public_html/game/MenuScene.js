@@ -166,11 +166,6 @@ function MenuScene(engine)
                 }
                 break;
         }
-        
-        if(input.keyboard.keyDown(KEY_CODE.SPACE))
-        {
-            
-        }
     };
     
     MenuScene.prototype.Draw = function(context)
