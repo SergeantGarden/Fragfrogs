@@ -242,7 +242,6 @@ function Input(gameCanvas)
     Input.controllers = {};
     
     var gamepads = [];
-    var gamepadsUsed = false;
     
     window.addEventListener("gamepadconnected", function(e) {
         gamepads[e.gamepad.index] = e.gamepad;
@@ -253,7 +252,6 @@ function Input(gameCanvas)
     
     Input.controllers.ButtonPressed = function(gamepadIndex, button)
     {
-        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         return gamepads[gamepadIndex].buttons[button].pressed;
@@ -261,7 +259,6 @@ function Input(gameCanvas)
     
     Input.controllers.ButtonValue = function(gamepadIndex, button)
     {
-        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         return gamepads[gamepadIndex].buttons[button].value;
@@ -271,7 +268,6 @@ function Input(gameCanvas)
     {
         if(stick !== 0 && stick !== 2) return false;
         
-        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         return {
@@ -285,7 +281,6 @@ function Input(gameCanvas)
         if(stick !== 0 && stick !== 2) return false;
         if(direction < 0 && direction > 3) return false;
         
-        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         if(minimalforce === null || minimalforce === undefined || minimalforce > 1)
@@ -313,14 +308,12 @@ function Input(gameCanvas)
     
     Input.controllers.GetGamePad = function(gamepadIndex)
     {
-        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         return gamepads[gamepadIndex];
     };
     
     Input.controllers.GetGamePads = function()
     {
-        gamepadsUsed = true;
         var gamepadList = navigator.getGamepads();
         for(var i = 0; i < gamepadList.length; i++)
         {
