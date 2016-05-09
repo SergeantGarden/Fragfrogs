@@ -353,6 +353,9 @@ function Engine(resolution, title, canvasParent)
         if(oldScene !== null)
         {
             engine.switchScene(oldScene, keepScene);
+        }else
+        {
+            return false;
         }
     };
     
