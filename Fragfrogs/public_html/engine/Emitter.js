@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-function Emitter(scene, position)
+function Emitter(position)
 {
     GameObject.call(this, position, 0, new Vector(1,1), null, false);
     this.particles = [];

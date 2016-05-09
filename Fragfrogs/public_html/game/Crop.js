@@ -30,7 +30,7 @@ function Crop(position, rotation, scale, size, scene)
     
     var _regenTime = 10;
     var _state = CROP_STATE.FULLGROWN;
-    var _emitter = new Emitter(scene, new Vector(position.x, position.y));
+    var _emitter = new Emitter(new Vector(position.x, position.y));
     scene.AddGameObject(_emitter, "foreground");
     
     Object.defineProperty(this, "state", {
