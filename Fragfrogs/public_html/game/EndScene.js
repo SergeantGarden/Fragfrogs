@@ -40,8 +40,9 @@ function EndScene(engine, player)
     
     EndScene.prototype.Update = function(input, dt)
     {
-        if(input.keyboard.keyDown(KEY_CODE.SPACE))
+        if(input.keyboard.keyPressed(KEY_CODE.SPACE) || input.keyboard.keyPressed(KEY_CODE.ENTER) || input.keyboard.keyPressed(KEY_CODE.ESCAPE))
         {
+            Engine.StopAllGameAudio("Fragfrogs");
             if(!engine.switchOldScene(false))
             {
                 engine.switchScene(new MenuScene(engine), false);
