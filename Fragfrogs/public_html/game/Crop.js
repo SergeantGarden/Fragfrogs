@@ -28,7 +28,7 @@ function Crop(position, rotation, scale, size, scene)
     this.sprite.AddAnimation("regen", [0,1,2,3]);
     this.sprite.frameIndex = 3;
     
-    var _regenTime = 10;
+    var _regenTime = 15;
     var _state = CROP_STATE.FULLGROWN;
     var _emitter = new Emitter(new Vector(position.x, position.y));
     scene.AddGameObject(_emitter, "foreground");
