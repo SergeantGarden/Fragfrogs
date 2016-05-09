@@ -261,6 +261,48 @@ function Engine(resolution, title, canvasParent)
         }
     };
     
+    Engine.StopAudio = function(gameTitle, audio)
+    {
+        if(!Engine.isUndefined(Engine.currentGame[gameTitle]))
+        {
+            if(!Engine.isUndefined(Engine.currentGame[gameTitle].gameAudio[audio]))
+            {
+                var audioFile = Engine.currentGame[gameTitle].gameAudio[audio];
+                audioFile.file.pause();
+                audioFile.file.currentTime = 0;
+            }else
+            {
+                console.log("No audio found under the name: " + audio);
+            }
+        }else
+        {
+            console.log("No game found under the name: " + gameTitle);
+        }
+    };
+    
+    Engine.StopAllGameAudio = function(gameTitle)
+    {
+        for(var audioFile in Engine.currentGame[gameTitle].gameAudio)
+        {
+            var audio = Engine.currentGame[gameTitle].gameAudio[audioFile];
+            audio.file.pause();
+            audio.file.currentTime = 0;
+        }
+    };
+    
+    Engine.StopAllAudio = function()
+    {
+        for(var game in Engine.currentGame)
+        {
+            for(var audioFile in Engine.currentGame[game].gameAudio)
+            {
+                var audio = Engine.currentGame[game].gameAudio[audioFile];
+                audio.file.pause();
+                audio.file.currentTime = 0;
+            }
+        }
+    };
+    
     function normalizeAssets(arg)
     {
         var assetArray = {};
