@@ -39,7 +39,7 @@ function MenuScene(engine)
 {
     Scene.call(this);
     
-    var currentMenuState = MENUSTATE.ReadyCheck;
+    var currentMenuState = MENUSTATE.MainMenu;
     var mainMenuChoice = 0;
     
     var selectedSprite = new Animation(Engine.currentGame[engine.gameTitle].gameAssets["PlayerGreen"], new Vector(16,16));
