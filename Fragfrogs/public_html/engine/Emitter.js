@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-function Emitter(position)
+function Emitter(position, externalForceUsed, externalForce)
 {
     GameObject.call(this, position, 0, new Vector(1,1), null, false);
+    this.usingExternalForce = externalForceUsed || false;
+    this.externalForce = new Vector(externalForce.x, externalForce.y) || new Vector(0,0);
     this.particles = [];
     
     Emitter.prototype.Emit = function(sprite, amount, lifeDuration, velocity, scale)
@@ -51,6 +53,7 @@ function Emitter(position)
             }else
             {
                 entry.Update(dt);
+                if(that.usingExternalForce) entry.velocity.add(that.externalForce.multiplyByNumber(dt));
             }
         });
     };
