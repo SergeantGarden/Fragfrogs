@@ -35,6 +35,12 @@ function Vector(x, y)
         this.y += vector.y;
     };
     
+    Vector.prototype.subtract = function(vector)
+    {
+        this.x -= vector.x;
+        this.y -= vector.y;
+    };
+    
     Vector.prototype.multiply = function(v2)
     {
         return new Vector(this.x * v2.x, this.y * v2.y);
