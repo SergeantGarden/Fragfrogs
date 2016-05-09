@@ -33,7 +33,7 @@ function Tongue(player, position, rotation, scale, size)
     var _playerTongue = player;
     var _playerPosition = new Vector(position.x, position.y);
     var _playerSize = new Vector(0,0);
-    var _speed = 300;
+    var _speed = 400;
     var _shooting = false;
     var _retreating = false;
     
