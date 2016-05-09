@@ -28,7 +28,7 @@ window.onload = function(e)
         GameSound:audio/In-game.mp3, Coin:audio/coin.mp3, Dash:audio/dash.mp3, Die:audio/die.mp3, Fly:audio/fly.mp3, Tongue:audio/tongue.mp3, MainLogo:images/logoFrog.png, Continue:images/continue.png, \n\
         Controls:images/controls.png, Instructions:images/instructions.png, Start:images/startButton.png, Arrow:images/pijl.png, ChoiceGreen:images/keuzegreen.png, ChoiceRed:images/keuzered.png, \n\
         ChoiceBlue:images/keuzeblauw.png, ChoiceBrown:images/keuzebrown.png, ChoiceGray:images/keuzegray.png, ChoicePink:images/keuzepink.png, ChoiceSkyBlue:images/keuzeskyblue.png, ChoiceYellow:images/keuzeyellow.png, \n\
-        ChoicePlayerOne:images/p1.png, ChoicePlayerTwo:images/p2.png");
+        ChoicePlayerOne:images/p1.png, ChoicePlayerTwo:images/p2.png, Menu:audio/menu.mp3, Winner:audio/winner.mp3");
         engine.onLoaded(function() {
             engine.Resize({x: 800, y: 640});
             scene = new MenuScene(engine);
