@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-function Particle(sprite, position, lifeDuration, velocity)
+function Particle(sprite, position, lifeDuration, velocityStart)
 {
-    GameObject.call(this, position, 0, new Vector(1,1), sprite);
-    
+    this.position = new Vector(position.x, position.y);
+    this.sprite = sprite || null;
     var _lifeDuration = lifeDuration || 1;
     var _alive = true;
     
@@ -30,7 +30,7 @@ function Particle(sprite, position, lifeDuration, velocity)
         get: function() { return _lifeDuration; }
     });
     
-    this.velocity = new Vector(velocity.x, velocity.y);
+    this.velocity = new Vector(velocityStart.x, velocityStart.y);
     setTimeout(Die.bind(this), this.lifeDuration * 1000);
     
     function Die()
@@ -38,15 +38,13 @@ function Particle(sprite, position, lifeDuration, velocity)
         this.alive = false;
     }
     
-    Particle.prototype.Update = function(input, dt)
+    Particle.prototype.Update = function(dt)
     {
-        if(this.alive) GameObject.prototype.Update.call(this, input, dt);
+        if(this.alive) this.position.add(this.velocity.multiplyByNumber(dt));
     };
     
     Particle.prototype.Draw = function(context)
     {
-        if(this.alive) GameObject.prototype.Draw.call(this, context);
+        if(this.alive && this.sprite !== null) this.sprite.Draw(context, this.position, 0, new Vector(1,1));
     };
 };
-
-Particle.prototype = Object.create(GameObject.prototype);

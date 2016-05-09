@@ -16,8 +16,7 @@
 
 function Emitter(scene, position)
 {
-    this.scene = scene;
-    this.position = position || new Vector(0,0);
+    GameObject.call(this, position, 0, new Vector(1,1), null, false);
     this.particles = [];
     
     Emitter.prototype.Emit = function(sprite, amount, lifeDuration, velocity)
@@ -26,7 +25,6 @@ function Emitter(scene, position)
         {
             var particle = new Particle(sprite, new Vector(this.position.x, this.position.y), lifeDuration, velocity);
             this.particles.push(particle);
-            this.scene.AddGameObject(particle, "foreground");
         }
     };
     
@@ -37,7 +35,6 @@ function Emitter(scene, position)
             var velocity = new Vector((Math.random() * (maxVelocity.x * 2)) - maxVelocity.x, (Math.random() * (maxVelocity.y * 2)) - maxVelocity.y);
             var particle = new Particle(sprite, new Vector(this.position.x, this.position.y), lifeDuration, velocity);
             this.particles.push(particle);
-            this.scene.AddGameObject(particle, "foreground");
         }
     };
     
@@ -49,7 +46,6 @@ function Emitter(scene, position)
             if(!entry.alive)
             {
                 that.particles.splice(that.particles.indexOf(entry), 1);
-                that.scene.RemoveGameObject(entry, "foreground");
             }else
             {
                 entry.Update(dt);
@@ -61,7 +57,12 @@ function Emitter(scene, position)
     {
         this.particles.forEach(function(entry)
         {
-            entry.Draw(context);
+            if(entry.alive)
+            {
+                entry.Draw(context);
+            }
         });
     };
 };
+
+Emitter.prototype = Object.create(GameObject.prototype);

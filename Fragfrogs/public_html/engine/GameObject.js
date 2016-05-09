@@ -28,7 +28,14 @@ function GameObject(position, rotation, scale, sprite, moveable)
     
     var _hasCollision = true;
     var _collisionProperties = {};
-    _collisionProperties.size = {x: _sprite.size.x, y: _sprite.size.y };
+    if(_sprite !== null)
+    {
+        _collisionProperties.size = {x: _sprite.size.x, y: _sprite.size.y};
+    }else
+    {
+        _hasCollision = false;
+        _collisionProperties.size = {x: 0, y: 0};
+    }
     var _collision = new Collision(COLLISION_TYPE.RECTANGLE, this, _collisionProperties);
     
     Object.defineProperty(this, "position", {
@@ -81,12 +88,12 @@ function GameObject(position, rotation, scale, sprite, moveable)
     GameObject.prototype.Update = function(input, dt)
     {
         this.position.add(this.velocity.multiplyByNumber(dt));
-        this.sprite.Update(dt);
+        if(sprite !== null) this.sprite.Update(dt);
     };
     
     GameObject.prototype.Draw = function(context)
     {
-        this.sprite.Draw(context, this.position, this.rotation, this.scale);
+        if(sprite !== null) this.sprite.Draw(context, this.position, this.rotation, this.scale);
     };
     
     GameObject.prototype.HandleCollision = function(cO, collisionSide)

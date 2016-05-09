@@ -30,7 +30,8 @@ function Crop(position, rotation, scale, size, scene)
     
     var _regenTime = 10;
     var _state = CROP_STATE.FULLGROWN;
-    //var _emitter = new Emitter(scene, new Vector(position.x, position.y));
+    var _emitter = new Emitter(scene, new Vector(position.x, position.y));
+    scene.AddGameObject(_emitter, "foreground");
     
     Object.defineProperty(this, "state", {
         get: function() { return _state; }
@@ -38,7 +39,6 @@ function Crop(position, rotation, scale, size, scene)
     
     this.Update = function(input, dt)
     {
-        //_emitter.Update(input, dt);
         GameObject.prototype.Update.call(this, input, dt);
     };
     
@@ -61,7 +61,6 @@ function Crop(position, rotation, scale, size, scene)
                 _state = CROP_STATE.FULLGROWN;
             }
         }
-        //_emitter.Draw(context);
         GameObject.prototype.Draw.call(this, context);
     };
     
@@ -83,7 +82,7 @@ function Crop(position, rotation, scale, size, scene)
                 var fly = new Fly(this.position, this.rotation, this.scale, this.sprite.size);
                 Engine.currentGame["Fragfrogs"].currentScene.AddGameObject(fly, "game");
             }
-            //_emitter.EmitRandom(new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Leaf"]), 3, 0.75, new Vector(60,60));
+            _emitter.EmitRandom(new Sprite(Engine.currentGame["Fragfrogs"].gameAssets["Leaf"]), 3, 0.75, new Vector(60,60));
         }
         _state = CROP_STATE.PICKED;
     };
