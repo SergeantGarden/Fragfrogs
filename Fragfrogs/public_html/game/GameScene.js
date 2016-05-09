@@ -38,6 +38,12 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
     {
         scoreBar.UpdateText(playerOne.score, playerTwo.score);
         
+        if(input.keyboard.keyPressed(KEY_CODE.ESCAPE))
+        {
+            Engine.StopAllGameAudio("Fragfrogs");
+            engine.switchOldScene(false);
+        }
+        
         if(playerOne.score >= 10 && !gameEnded)
         {
             Engine.StopAllGameAudio("Fragfrogs");
