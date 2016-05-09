@@ -279,6 +279,9 @@ function MenuScene(engine)
                 {
                     Engine.StopAllGameAudio("Fragfrogs");
                     var scene = new GameScene(engine, playerOneChoice, playerTwoChoice, levelChosen + 1);
+                    currentMenuState = MENUSTATE.MainMenu;
+                    playerOneReady = false;
+                    playerTwoReady = false;
                     engine.switchScene(scene, true);
                 }
                 break;
