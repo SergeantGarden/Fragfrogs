@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-function Particle(sprite, position, lifeDuration, velocityStart)
+function Particle(sprite, position, scale, lifeDuration, velocityStart)
 {
     this.position = new Vector(position.x, position.y);
+    this.scale = scale;
     this.sprite = sprite || null;
     var _lifeDuration = lifeDuration || 1;
     var _alive = true;
@@ -45,6 +46,6 @@ function Particle(sprite, position, lifeDuration, velocityStart)
     
     Particle.prototype.Draw = function(context)
     {
-        if(this.alive && this.sprite !== null) this.sprite.Draw(context, this.position, 0, new Vector(1,1));
+        if(this.alive && this.sprite !== null) this.sprite.Draw(context, this.position, 0, this.scale);
     };
 };

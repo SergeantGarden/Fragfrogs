@@ -19,21 +19,23 @@ function Emitter(scene, position)
     GameObject.call(this, position, 0, new Vector(1,1), null, false);
     this.particles = [];
     
-    Emitter.prototype.Emit = function(sprite, amount, lifeDuration, velocity)
+    Emitter.prototype.Emit = function(sprite, amount, lifeDuration, velocity, scale)
     {
+        if(Engine.isUndefined(scale)) scale = new Vector(1,1);
         for(var i = 0; i < amount; i++)
         {
-            var particle = new Particle(sprite, new Vector(this.position.x, this.position.y), lifeDuration, velocity);
+            var particle = new Particle(sprite, new Vector(this.position.x, this.position.y), scale, lifeDuration, velocity);
             this.particles.push(particle);
         }
     };
     
-    Emitter.prototype.EmitRandom = function(sprite, amount, lifeDuration, maxVelocity)
+    Emitter.prototype.EmitRandom = function(sprite, amount, lifeDuration, maxVelocity, scale)
     {
+        if(Engine.isUndefined(scale)) scale = new Vector(1,1);
         for(var i = 0; i < amount; i++)
         {
             var velocity = new Vector((Math.random() * (maxVelocity.x * 2)) - maxVelocity.x, (Math.random() * (maxVelocity.y * 2)) - maxVelocity.y);
-            var particle = new Particle(sprite, new Vector(this.position.x, this.position.y), lifeDuration, velocity);
+            var particle = new Particle(sprite, new Vector(this.position.x, this.position.y), scale, lifeDuration, velocity);
             this.particles.push(particle);
         }
     };
