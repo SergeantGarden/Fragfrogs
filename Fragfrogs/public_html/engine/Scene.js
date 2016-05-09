@@ -209,7 +209,7 @@ Scene.prototype.Draw = function(context)
     if(this.private._delayStart > 0)
     {
         context.save();
-        context.fillStyle = "black";//rgba(0,0,0,0.5);
+        context.fillStyle = "rgba(0,0,0,0.6)";
         context.fillRect(0, 0, Engine.currentGame[this.private._engine.gameTitle].originalResolution.x, Engine.currentGame[this.private._engine.gameTitle].originalResolution.y);
         context.restore();
         
