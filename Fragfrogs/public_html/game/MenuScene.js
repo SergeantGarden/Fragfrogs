@@ -86,6 +86,8 @@ function MenuScene(engine)
     
     setInterval(SwitchSelectedPosition, 400);
     
+    Engine.PlayAudio("Fragfrogs", "Menu", 0.2);
+    
     function HandlePlayerOnePick(input)
     {
         if(input.keyboard.keyPressed(KEY_CODE.a))
@@ -275,6 +277,7 @@ function MenuScene(engine)
                 
                 if(playerOneReady && playerTwoReady)
                 {
+                    Engine.StopAllGameAudio("Fragfrogs");
                     var scene = new GameScene(engine, playerOneChoice, playerTwoChoice, levelChosen + 1);
                     engine.switchScene(scene, true);
                 }
