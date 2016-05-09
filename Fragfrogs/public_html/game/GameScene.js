@@ -16,7 +16,7 @@
 
 GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
 {
-    Scene.call(this);
+    Scene.call(this, engine, 3);
     
     GameScene.spawnLocations = [];
     

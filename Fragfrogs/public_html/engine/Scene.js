@@ -14,10 +14,12 @@
  *  limitations under the License.
  */
 
-function Scene()
+function Scene(engine, delayTime)
 {
     var _private = {};
     _private._gameObjects = [];
+    _private._delayStart = delayTime || 0;
+    _private._engine = engine;
     
     Object.defineProperty(this, "private", {
         get: function() { return _private; }
@@ -146,34 +148,40 @@ Scene.prototype.CheckCollision = function()
 
 Scene.prototype.Update = function(input, dt)
 {
-    var that = this;
-    for(var layer in this.private._gameObjects)
+    if(this.private._delayStart <= 0)
     {
-        this.private._gameObjects[layer].immoveable.forEach(function(entry)
+        var that = this;
+        for(var layer in this.private._gameObjects)
         {
-            if(entry === null || entry === undefined)
+            this.private._gameObjects[layer].immoveable.forEach(function(entry)
             {
-                that.private._gameObjects[layer].splice(that.private._gameObjects[layer].indexOf(entry, 1));
-            }else if(entry.active)
-            {
-                entry.Update(input, dt);
-            }
-        });
-        
-        this.private._gameObjects[layer].moveable.forEach(function(entry)
-        {
-            if(entry === null || entry === undefined)
-            {
-                that.private._gameObjects[layer].splice(that.private._gameObjects[layer].indexOf(entry, 1));
-            }else if(entry.active)
-            {
-                entry.Update(input, dt);
-                if(entry.hasCollision)
+                if(entry === null || entry === undefined)
                 {
-                    that.CheckCollision.call(that, entry, layer);
+                    that.private._gameObjects[layer].splice(that.private._gameObjects[layer].indexOf(entry, 1));
+                }else if(entry.active)
+                {
+                    entry.Update(input, dt);
                 }
-            }
-        });
+            });
+
+            this.private._gameObjects[layer].moveable.forEach(function(entry)
+            {
+                if(entry === null || entry === undefined)
+                {
+                    that.private._gameObjects[layer].splice(that.private._gameObjects[layer].indexOf(entry, 1));
+                }else if(entry.active)
+                {
+                    entry.Update(input, dt);
+                    if(entry.hasCollision)
+                    {
+                        that.CheckCollision.call(that, entry, layer);
+                    }
+                }
+            });
+        }
+    }else
+    {
+        this.private._delayStart -= dt;
     }
 };
 
@@ -196,5 +204,19 @@ Scene.prototype.Draw = function(context)
                 entry.Draw(context);
             }
         });
+    }
+    
+    if(this.private._delayStart > 0)
+    {
+        context.save();
+        context.fillStyle = "black";//rgba(0,0,0,0.5);
+        context.fillRect(0, 0, Engine.currentGame[this.private._engine.gameTitle].originalResolution.x, Engine.currentGame[this.private._engine.gameTitle].originalResolution.y);
+        context.restore();
+        
+        context.save();
+        context.font = "100px Arial";
+        context.fillStyle = "white";
+        context.fillText(Math.ceil(this.private._delayStart), 170, 180);
+        context.restore();
     }
 };
