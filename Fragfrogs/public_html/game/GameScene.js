@@ -24,6 +24,7 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
     var tileSize = new Vector(16,16);
     var tiles = new Vector(parseInt(canvasSize.x / tileSize.x), parseInt((canvasSize.y - (2 * tileSize.y)) / tileSize.y));
     var totalTiles = tiles.x * tiles.y;
+    var gameEnded = false;
     
     var playerOne = new Player(1, this, new Vector(24,24), 0, new Vector(1,1), playerOneSprite, new Vector(16, 16));
     var playerTwo = new Player(2, this, new Vector(152,152), 0, new Vector(1,1), playerTwoSprite, new Vector(16, 16));
@@ -37,17 +38,27 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
     {
         scoreBar.UpdateText(playerOne.score, playerTwo.score);
         
-        var scene = null;
-        if(playerOne.score >= 10)
+        if(playerOne.score >= 10 && !gameEnded)
         {
-            scene = new EndScene(engine, playerOneSprite);
-            engine.switchScene(scene, false);
-        }else if(playerTwo.score >= 10)
+            Engine.StopAllGameAudio("Fragfrogs");
+            Engine.PlayAudio("Fragfrogs", "Winner", 0.1);
+            setTimeout(GameWon.bind(this, playerOneSprite), 2000);
+            gameEnded = true;
+        }else if(playerTwo.score >= 10 && !gameEnded)
         {
-            scene = new EndScene(engine, playerTwoSprite);
-            engine.switchScene(scene, false);
+            Engine.StopAllGameAudio("Fragfrogs");
+            Engine.PlayAudio("Fragfrogs", "Winner", 0.1);
+            setTimeout(GameWon.bind(this, playerTwoSprite), 2000);
+            gameEnded = true;
         }
-        Scene.prototype.Update.call(this, input, dt);
+        if(!gameEnded) Scene.prototype.Update.call(this, input, dt);
+    };
+    
+    function GameWon(playerSprite)
+    {
+        console.log(playerSprite);
+        var scene = new EndScene(engine, playerSprite);
+        engine.switchScene(scene, false);
     };
     
     GameScene.prototype.Draw = function(context)
