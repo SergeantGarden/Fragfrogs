@@ -56,7 +56,6 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
     
     function GameWon(playerSprite)
     {
-        console.log(playerSprite);
         var scene = new EndScene(engine, playerSprite);
         engine.switchScene(scene, false);
     };
