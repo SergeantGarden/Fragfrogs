@@ -40,12 +40,10 @@ GameScene = function(engine, playerOneSprite, playerTwoSprite, level)
         var scene = null;
         if(playerOne.score >= 10)
         {
-            console.log("player 1 won!");
             scene = new EndScene(engine, playerOneSprite);
             engine.switchScene(scene, false);
         }else if(playerTwo.score >= 10)
         {
-            console.log("player 2 won!");
             scene = new EndScene(engine, playerTwoSprite);
             engine.switchScene(scene, false);
         }
