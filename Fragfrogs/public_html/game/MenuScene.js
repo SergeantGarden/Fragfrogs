@@ -86,8 +86,6 @@ function MenuScene(engine)
     
     setInterval(SwitchSelectedPosition, 400);
     
-    Engine.PlayAudio("Fragfrogs", "Menu", 0.2);
-    
     function HandlePlayerOnePick(input)
     {
         if(input.keyboard.keyPressed(KEY_CODE.a))
@@ -192,6 +190,7 @@ function MenuScene(engine)
     
     MenuScene.prototype.Update = function(input, dt)
     {
+        Engine.PlayAudio("Fragfrogs", "Menu", 0.2);
         switch(currentMenuState)
         {
             case MENUSTATE.MainMenu:
