@@ -150,25 +150,25 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     function PlayerOneUpdate(input, dt)
     {
-        if(input.keyboard.keyDown(KEY_CODE.SPACE) && this.specialAbility && !this.dashing)
+        if((input.keyboard.keyDown(KEY_CODE.SPACE) || input.controllers.ButtonPressed(0, CONTROLLER_BUTTONS.XBOX_A)) && this.specialAbility && !this.dashing)
         {
             Shoot.call(this);
         }
         if(!this.shooting && !this.dashing)
         {
-            if(input.keyboard.keyDown(KEY_CODE.w))
+            if(input.keyboard.keyDown(KEY_CODE.w) || input.controllers.StickDirection(0, 0, CONTROLLER_STICK_DIRECTION.UP, 0.75))
             {
                 this.direction.up = true;
                 this.direction.down = this.direction.left = this.direction.right = false;
-            }else if(input.keyboard.keyDown(KEY_CODE.s))
+            }else if(input.keyboard.keyDown(KEY_CODE.s) || input.controllers.StickDirection(0, 0, CONTROLLER_STICK_DIRECTION.DOWN, 0.75))
             {
                 this.direction.down = true;
                 this.direction.up = this.direction.left = this.direction.right = false;
-            }else if(input.keyboard.keyDown(KEY_CODE.a))
+            }else if(input.keyboard.keyDown(KEY_CODE.a) || input.controllers.StickDirection(0, 0, CONTROLLER_STICK_DIRECTION.LEFT, 0.75))
             {
                 this.direction.left = true;
                 this.direction.up = this.direction.down = this.direction.right = false;
-            }else if(input.keyboard.keyDown(KEY_CODE.d))
+            }else if(input.keyboard.keyDown(KEY_CODE.d) || input.controllers.StickDirection(0, 0, CONTROLLER_STICK_DIRECTION.RIGHT, 0.75))
             {
                 this.direction.right = true;
                 this.direction.up = this.direction.down = this.direction.left = false;
@@ -184,25 +184,25 @@ function Player(player, scene, position, rotation, scale, imageName, size)
     
     function PlayerTwoUpdate(input, dt)
     {
-        if(input.keyboard.keyDown(KEY_CODE.FSLASH) && this.specialAbility && !this.dashing)
+        if((input.keyboard.keyDown(KEY_CODE.FSLASH) || input.controllers.ButtonPressed(1, CONTROLLER_BUTTONS.XBOX_A)) && this.specialAbility && !this.dashing)
         {
             Shoot.call(this);
         }
         if(!this.shooting && !this.dashing)
         {
-            if(input.keyboard.keyDown(KEY_CODE.UP))
+            if(input.keyboard.keyDown(KEY_CODE.UP) || input.controllers.StickDirection(1, 0, CONTROLLER_STICK_DIRECTION.UP, 0.75))
             {
                 this.direction.up = true;
                 this.direction.down = this.direction.left = this.direction.right = false;
-            }else if(input.keyboard.keyDown(KEY_CODE.DOWN))
+            }else if(input.keyboard.keyDown(KEY_CODE.DOWN) || input.controllers.StickDirection(1, 0, CONTROLLER_STICK_DIRECTION.DOWN, 0.75))
             {
                 this.direction.down = true;
                 this.direction.up = this.direction.left = this.direction.right = false;
-            }else if(input.keyboard.keyDown(KEY_CODE.LEFT))
+            }else if(input.keyboard.keyDown(KEY_CODE.LEFT) || input.controllers.StickDirection(1, 0, CONTROLLER_STICK_DIRECTION.LEFT, 0.75))
             {
                 this.direction.left = true;
                 this.direction.up = this.direction.down = this.direction.right = false;
-            }else if(input.keyboard.keyDown(KEY_CODE.RIGHT))
+            }else if(input.keyboard.keyDown(KEY_CODE.RIGHT) || input.controllers.StickDirection(1, 0, CONTROLLER_STICK_DIRECTION.RIGHT, 0.75))
             {
                 this.direction.right = true;
                 this.direction.up = this.direction.down = this.direction.left = false;
