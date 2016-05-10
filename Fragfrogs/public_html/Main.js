@@ -21,6 +21,7 @@ window.onload = function(e)
     {
         var scene = null;
         var engine = Engine({x: 400, y: 320 }, "Fragfrogs");
+        engine.Resize({x: 800, y: 640});
         engine.PreloadScripts("game/MenuScene.js, game/EndScene.js, game/GameScene.js, game/Tongue.js, game/Player.js, game/Crop.js, game/Coin.js, game/Fly.js, game/WallBlock.js, game/ScoreBar.js");
         engine.PreloadAssets("BG:images/bg.png, PlayerGreen:images/player.png, PlayerRed:images/playerred.png, PlayerBlue:images/playerblue.png, PlayerBrown:images/playerbrown.png, \n\
         PlayerGray:images/playergray.png, PlayerPink:images/playerpink.png, PlayerSkyBlue:images/playerskyblue.png, PlayerYellow:images/playeryellow.png, Glow:images/tongueGlow.png, \n\
@@ -30,7 +31,6 @@ window.onload = function(e)
         ChoiceBlue:images/keuzeblauw.png, ChoiceBrown:images/keuzebrown.png, ChoiceGray:images/keuzegray.png, ChoicePink:images/keuzepink.png, ChoiceSkyBlue:images/keuzeskyblue.png, ChoiceYellow:images/keuzeyellow.png, \n\
         ChoicePlayerOne:images/p1.png, ChoicePlayerTwo:images/p2.png, Menu:audio/menu.mp3, Winner:audio/winner.mp3");
         engine.onLoaded(function() {
-            engine.Resize({x: 800, y: 640});
             scene = new MenuScene(engine);
             engine.Start(scene);
         });

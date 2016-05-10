@@ -41,6 +41,7 @@ function Engine(resolution, title, canvasParent)
     engine.canvas.height = Engine.currentGame[engine.gameTitle].resolution.y;
     engine.canvas.style.border = "1px solid";
     
+    var canvasInitialized = false;
     var canvasLocation = canvasParent || 'body';
     var oldScene = null;
     var maxFrameTime = 100;
@@ -79,8 +80,56 @@ function Engine(resolution, title, canvasParent)
     
     engine.onLoaded = function(callback)
     {
+        if(!canvasInitialized)
+        {
+            canvasInitialized = true;
+            if(canvasLocation !== 'body' && document.getElementById(canvasLocation))
+            {
+                document.getElementById(canvasLocation).appendChild(engine.canvas);
+            }else
+            {
+                (document.getElementsByTagName('body')[0]).appendChild(engine.canvas);
+            }
+        }
+        
         if(engine.input === null || scriptsLoaded < scriptsPreloading || assetsLoaded < assetsPreloading)
         {
+            if(Engine.currentGame[engine.gameTitle].loadingScene === null)
+            {
+                Engine.currentGame[engine.gameTitle].loadingScene = new function()
+                {
+                    var loadedFiles = 0;
+                    var totalFiles = 0;
+                    this.Update = function()
+                    {
+                        totalFiles = scriptsPreloading + assetsPreloading;
+                        loadedFiles = scriptsLoaded + assetsLoaded;
+                    };
+                    
+                    this.Draw = function(context)
+                    {
+                        context.clearRect(0,0, Engine.currentGame[engine.gameTitle].resolution.x * engine.resizeScale.x, Engine.currentGame[engine.gameTitle].resolution.y * engine.resizeScale.y);
+                        context.fillStyle = "#000";
+                        context.save();
+                        context.scale(engine.scale.x * engine.resizeScale.x, engine.scale.y * engine.resizeScale.y);
+                                        
+                        context.fillStyle = "black";
+                        context.fillRect(0, 0, Engine.currentGame[engine.gameTitle].originalResolution.x, Engine.currentGame[engine.gameTitle].originalResolution.y);
+                        context.font = "12px Arial";
+                        context.fillStyle = "white";
+                        context.fillText("Loading files: " + loadedFiles + "/" + totalFiles, (Engine.currentGame[engine.gameTitle].originalResolution.x / 2) - 60, (Engine.currentGame[engine.gameTitle].originalResolution.y / 2));
+                        context.fillRect(Engine.currentGame[engine.gameTitle].originalResolution.x / 20, (Engine.currentGame[engine.gameTitle].originalResolution.y / 2) + 20, Engine.currentGame[engine.gameTitle].originalResolution.x - (Engine.currentGame[engine.gameTitle].originalResolution.x / 10), (Engine.currentGame[engine.gameTitle].originalResolution.y / 20));
+                        context.fillStyle = "black";
+                        context.fillRect(Engine.currentGame[engine.gameTitle].originalResolution.x / 20 + 2, (Engine.currentGame[engine.gameTitle].originalResolution.y / 2) + 22, Engine.currentGame[engine.gameTitle].originalResolution.x - (Engine.currentGame[engine.gameTitle].originalResolution.x / 10) - 5, (Engine.currentGame[engine.gameTitle].originalResolution.y / 20) - 5);
+                        context.fillStyle = "white";
+                        context.fillRect(Engine.currentGame[engine.gameTitle].originalResolution.x / 20 + 2, (Engine.currentGame[engine.gameTitle].originalResolution.y / 2) + 22, (Engine.currentGame[engine.gameTitle].originalResolution.x - (Engine.currentGame[engine.gameTitle].originalResolution.x / 10) - 5) * (loadedFiles / totalFiles), (Engine.currentGame[engine.gameTitle].originalResolution.y / 20) - 5);
+
+                        context.restore();
+                    };
+                };
+            }
+            Engine.currentGame[engine.gameTitle].loadingScene.Update();
+            Engine.currentGame[engine.gameTitle].loadingScene.Draw(engine.canvas.getContext('2d'));
             scheduleFrame(engine.onLoaded.bind(this, callback));
             return;
         }
@@ -101,14 +150,6 @@ function Engine(resolution, title, canvasParent)
     
     gameLoop = function()
     {
-        if(canvasLocation !== 'body' && document.getElementById(canvasLocation))
-        {
-            document.getElementById(canvasLocation).appendChild(engine.canvas);
-        }else
-        {
-            (document.getElementsByTagName('body')[0]).appendChild(engine.canvas);
-        }
-        
         engine.lastFrame = new Date().getTime();
         engine.loop = true;
         engine.currentFrame = 0;
