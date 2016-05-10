@@ -15,10 +15,10 @@
  */
 
 Engine.currentGame = {};
+Engine.audioVolume = 1;
 
 function Engine(resolution, title, canvasParent)
 {
-    Engine.audioVolume = 1;
     Engine.currentGame[title] = { gameAssets: {},
                                   gameAudio: {},
                                   resolution: resolution,
