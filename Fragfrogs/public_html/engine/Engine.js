@@ -41,16 +41,16 @@ function Engine(resolution, title, canvasParent)
     engine.canvas.height = Engine.currentGame[engine.gameTitle].resolution.y;
     engine.canvas.style.border = "1px solid";
     
-    var canvasInitialized = false;
-    var canvasLocation = canvasParent || 'body';
-    var oldScene = null;
-    var maxFrameTime = 100;
+    engine.canvasInitialized = false;
+    engine.canvasLocation = canvasParent || 'body';
+    engine.oldScene = null;
+    engine.maxFrameTime = 100;
     
-    var scriptsPreloading = 0;
-    var scriptsLoaded = 0;
+    engine.scriptsPreloading = 0;
+    engine.scriptsLoaded = 0;
     
-    var assetsPreloading = 0;
-    var assetsLoaded = 0;
+    engine.assetsPreloading = 0;
+    engine.assetsLoaded = 0;
     
     engine.input = null;
     
@@ -80,19 +80,19 @@ function Engine(resolution, title, canvasParent)
     
     engine.onLoaded = function(callback)
     {
-        if(!canvasInitialized)
+        if(!engine.canvasInitialized)
         {
-            canvasInitialized = true;
-            if(canvasLocation !== 'body' && document.getElementById(canvasLocation))
+            engine.canvasInitialized = true;
+            if(engine.canvasLocation !== 'body' && document.getElementById(engine.canvasLocation))
             {
-                document.getElementById(canvasLocation).appendChild(engine.canvas);
+                document.getElementById(engine.canvasLocation).appendChild(engine.canvas);
             }else
             {
                 (document.getElementsByTagName('body')[0]).appendChild(engine.canvas);
             }
         }
         
-        if(engine.input === null || scriptsLoaded < scriptsPreloading || assetsLoaded < assetsPreloading)
+        if(engine.input === null || engine.scriptsLoaded < engine.scriptsPreloading || engine.assetsLoaded < engine.assetsPreloading)
         {
             if(Engine.currentGame[engine.gameTitle].loadingScene === null)
             {
@@ -102,8 +102,8 @@ function Engine(resolution, title, canvasParent)
                     var totalFiles = 0;
                     this.Update = function()
                     {
-                        totalFiles = scriptsPreloading + assetsPreloading;
-                        loadedFiles = scriptsLoaded + assetsLoaded;
+                        totalFiles = engine.scriptsPreloading + engine.assetsPreloading;
+                        loadedFiles = engine.scriptsLoaded + engine.assetsLoaded;
                     };
                     
                     this.Draw = function(context)
@@ -160,7 +160,7 @@ function Engine(resolution, title, canvasParent)
             engine.currentFrame++;
             engine.loop = scheduleFrame(engine.gameLoopCallback);
             var dt = now - engine.lastFrame;
-            if(dt > maxFrameTime) { dt = maxFrameTime; }
+            if(dt > engine.maxFrameTime) { dt = engine.maxFrameTime; }
             
             Engine.currentGame[engine.gameTitle].currentScene.Update(engine.input, dt/1000);
             Draw(engine.canvas.getContext('2d'));
@@ -425,7 +425,7 @@ function Engine(resolution, title, canvasParent)
         engine.pauseGame();
         if(keepScene)
         {
-            oldScene = Engine.currentGame[engine.gameTitle].currentScene;
+            engine.oldScene = Engine.currentGame[engine.gameTitle].currentScene;
         }
         Engine.currentGame[engine.gameTitle].currentScene = scene;
         engine.unpauseGame();
@@ -433,9 +433,9 @@ function Engine(resolution, title, canvasParent)
     
     engine.switchOldScene = function(keepScene)
     {
-        if(oldScene !== null)
+        if(engine.oldScene !== null)
         {
-            engine.switchScene(oldScene, keepScene);
+            engine.switchScene(engine.oldScene, keepScene);
         }else
         {
             return false;
@@ -450,10 +450,10 @@ function Engine(resolution, title, canvasParent)
         {
             for(var i = 0; i < scripts.length; i++)
             {
-                scriptsPreloading++;
+                engine.scriptsPreloading++;
                 $.getScript(scripts[i], function()
                 {
-                    scriptsLoaded++;
+                    engine.scriptsLoaded++;
                 });
             }
         }else
@@ -486,12 +486,12 @@ function Engine(resolution, title, canvasParent)
     
     function loadAudio(soundUrl, key)
     {
-        assetsPreloading++;
+        engine.assetsPreloading++;
         var audio = {};
         audio.file = new Audio(soundUrl);
         audio.file.onloadeddata = function()
         {
-            assetsLoaded++;
+            engine.assetsLoaded++;
         };
         audio.volume = 1;
         
@@ -500,12 +500,12 @@ function Engine(resolution, title, canvasParent)
     
     function loadImage(imageUrl, key)
     {
-        assetsPreloading++;
+        engine.assetsPreloading++;
         var image = new Image();
         image.name = image.alt = key;
         image.onload = function()
         {
-            assetsLoaded++;
+            engine.assetsLoaded++;
         };
         image.src = imageUrl;
         
