@@ -16,11 +16,26 @@
 
 window.onload = function(e)
 {
-    /* BUG: CANNOT INITIATE MORE THAN ONE ENGINE*/
+    /* BUG: CANNOT INITIATE MORE THAN ONE ENGINE
+     * possibly scheduleframe??                                         
+     */
     $.getScript("engine/Engine.js", function() 
     {
+        var engineOne = new Engine({x: 400, y: 320 }, "Temp");
+        engineOne.onLoaded(function() {
+            var scene = new Scene();
+            scene.Draw = function(context)
+            {
+                context.save();
+                context.fillStyle = "black";
+                context.fillRect(100,100, 200, 200);
+                context.restore();
+            };
+            engineOne.Start(scene);
+        });
+        
         var scene = null;
-        var engine = Engine({x: 400, y: 320 }, "Fragfrogs");
+        var engine = new Engine({x: 400, y: 320 }, "Fragfrogs");
         engine.Resize({x: 800, y: 640});
         engine.PreloadScripts("game/MenuScene.js, game/EndScene.js, game/GameScene.js, game/Tongue.js, game/Player.js, game/Crop.js, game/Coin.js, game/Fly.js, game/WallBlock.js, game/ScoreBar.js");
         engine.PreloadAssets("BG:images/bg.png, PlayerGreen:images/player.png, PlayerRed:images/playerred.png, PlayerBlue:images/playerblue.png, PlayerBrown:images/playerbrown.png, \n\
@@ -33,6 +48,24 @@ window.onload = function(e)
         engine.onLoaded(function() {
             scene = new MenuScene(engine);
             engine.Start(scene);
+            
+            /*var engineOne = new Engine({x: 400, y: 320 }, "Temp");
+            engineOne.onLoaded(function() {
+                var scene = new Scene();
+                scene.Draw= function(context)
+                {
+                    context.save();
+                    context.fillStyle = "black";
+                    context.fillRect(100,100, 200, 200);
+                    context.restore();
+                };
+                engineOne.Start(scene);
+            });*/
         });
+        
+        /*var engineTwo = new Engine({x: 400, y: 320 }, "Temp");
+        engineTwo.onLoaded(function() {
+            engineTwo.Start(new Scene());
+        });*/
     });
 };
