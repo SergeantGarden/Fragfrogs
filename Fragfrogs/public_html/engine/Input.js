@@ -107,8 +107,10 @@ var MOUSE_BUTTON =
     Middle: 4
 };
 
-function Input(gameCanvas)
+function Input(engine, gameCanvas)
 {
+    Input.engine = engine;
+    Input.canvas = gameCanvas;
     /* -----------------------Keyboard----------------------------------- */
     Input.keyboard = {};
     
@@ -207,7 +209,24 @@ function Input(gameCanvas)
         if(!mouseInfo.mouseClicked) return false;
         if(targetObject !== null && targetObject !== undefined)
         {
-            if(mouseInfo.target !== targetObject) return false;
+            if(targetObject.hasOwnProperty("collision"))
+            {
+                var mouseVector = new Vector(mouseInfo.x, mouseInfo.y);
+                if(Input.engine.scale.x * Input.engine.resizeScale.x !== 1 || Input.engine.scale.y * Input.engine.resizeScale.y !== 1)
+                {
+                    mouseVector = new Vector(mouseInfo.x / (Input.engine.scale.x * Input.engine.resizeScale.x), mouseInfo.y / (Input.engine.scale.y * Input.engine.resizeScale.y));
+                }
+                if(targetObject.collision.type === COLLISION_TYPE.CIRCLE)
+                {
+                    if(!Collision.CheckCirclePoint(targetObject.collision, mouseVector)[0]) return false;
+                }else if(targetObject.collision.type === COLLISION_TYPE.RECTANGLE)
+                {
+                    if(!Collision.CheckRectanglePoint(targetObject.collision, mouseVector)[0]) return false;
+                }
+            }else
+            {
+                if(mouseInfo.target !== targetObject) return false;
+            }
         }
         if(button !== null && button !== undefined)
         {
@@ -221,7 +240,24 @@ function Input(gameCanvas)
         if(!mouseInfo.mouseDown) return false;
         if(targetObject !== null && targetObject !== undefined)
         {
-            if(mouseInfo.target !== targetObject) return false;
+            if(targetObject.hasOwnProperty("collision"))
+            {
+                var mouseVector = new Vector(mouseInfo.x, mouseInfo.y);
+                if(Input.engine.scale.x * Input.engine.resizeScale.x !== 1 || Input.engine.scale.y * Input.engine.resizeScale.y !== 1)
+                {
+                    mouseVector = new Vector(mouseInfo.x / (Input.engine.scale.x * Input.engine.resizeScale.x), mouseInfo.y / (Input.engine.scale.y * Input.engine.resizeScale.y));
+                }
+                if(targetObject.collision.type === COLLISION_TYPE.CIRCLE)
+                {
+                    if(!Collision.CheckCirclePoint(targetObject.collision, mouseVector)[0]) return false;
+                }else if(targetObject.collision.type === COLLISION_TYPE.RECTANGLE)
+                {
+                    if(!Collision.CheckRectanglePoint(targetObject.collision, mouseVector)[0]) return false;
+                }
+            }else
+            {
+                if(mouseInfo.target !== targetObject) return false;
+            }
         }
         if(button !== null && button !== undefined)
         {
@@ -242,6 +278,7 @@ function Input(gameCanvas)
     Input.controllers = {};
     
     var gamepads = [];
+    var gamepadsUsed = false;
     
     window.addEventListener("gamepadconnected", function(e) {
         gamepads[e.gamepad.index] = e.gamepad;
@@ -252,6 +289,7 @@ function Input(gameCanvas)
     
     Input.controllers.ButtonPressed = function(gamepadIndex, button)
     {
+        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         return gamepads[gamepadIndex].buttons[button].pressed;
@@ -259,6 +297,7 @@ function Input(gameCanvas)
     
     Input.controllers.ButtonValue = function(gamepadIndex, button)
     {
+        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         return gamepads[gamepadIndex].buttons[button].value;
@@ -268,6 +307,7 @@ function Input(gameCanvas)
     {
         if(stick !== 0 && stick !== 2) return false;
         
+        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         return {
@@ -281,6 +321,7 @@ function Input(gameCanvas)
         if(stick !== 0 && stick !== 2) return false;
         if(direction < 0 && direction > 3) return false;
         
+        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         if(gamepads[gamepadIndex] === null || gamepads[gamepadIndex] === undefined) return false;
         if(minimalforce === null || minimalforce === undefined || minimalforce > 1)
@@ -308,12 +349,14 @@ function Input(gameCanvas)
     
     Input.controllers.GetGamePad = function(gamepadIndex)
     {
+        gamepadsUsed = true;
         gamepads[gamepadIndex] = navigator.getGamepads()[gamepadIndex];
         return gamepads[gamepadIndex];
     };
     
     Input.controllers.GetGamePads = function()
     {
+        gamepadsUsed = true;
         var gamepadList = navigator.getGamepads();
         for(var i = 0; i < gamepadList.length; i++)
         {
