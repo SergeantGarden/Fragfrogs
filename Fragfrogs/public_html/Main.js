@@ -21,7 +21,7 @@ window.onload = function(e)
      */
     $.getScript("engine/Engine.js", function() 
     {
-        var engineOne = new Engine({x: 400, y: 320 }, "Temp");
+        /*var engineOne = new Engine({x: 400, y: 320 }, "Temp");
         engineOne.onLoaded(function() {
             var scene = new Scene();
             scene.Draw = function(context)
@@ -32,7 +32,7 @@ window.onload = function(e)
                 context.restore();
             };
             engineOne.Start(scene);
-        });
+        });*/
         
         var scene = null;
         var engine = new Engine({x: 400, y: 320 }, "Fragfrogs");
